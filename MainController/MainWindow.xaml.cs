@@ -31,13 +31,23 @@ namespace MainController
     public partial class MainWindow : Window
     {
         OscServer oscCmdServer;
-        private static int Port = 5103;
+        private static int Port = 8000;
         private static readonly string oscCmd = "/limbo/cmd";
 
         OscMessage msg;
-        private static IPEndPoint sourceEndPoint = new IPEndPoint(IPAddress.Loopback, Port);
+
+        private static IPEndPoint kinectFrontIP = new IPEndPoint(IPAddress.Loopback, Port);
+        private static IPEndPoint kinectBackIP = new IPEndPoint(IPAddress.Loopback, Port);
+        private static IPEndPoint limboDisplayIP = new IPEndPoint(IPAddress.Loopback, Port);
+        private static IPEndPoint imageServerIP = new IPEndPoint(IPAddress.Loopback, Port);
+        private static IPEndPoint limboIP = new IPEndPoint(IPAddress.Loopback, Port);
+        private static IPEndPoint ipadIP = new IPEndPoint(IPAddress.Loopback, Port);
+
 
         SerialPort serial = new SerialPort();
+        string serialRxData;
+        FlowDocument mcFlowDoc = new FlowDocument();
+        Paragraph para = new Paragraph();
 
         public MainWindow()
         {
@@ -47,10 +57,23 @@ namespace MainController
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            comms_connect.Content = "Connect";
+
+            portInput.Text = Port.ToString();
+            kinectFrontIPInput.Text = IPAddress.Loopback.ToString();
+            kinectBackIPInput.Text = IPAddress.Loopback.ToString();   
+            limboViewerIPInput.Text = IPAddress.Loopback.ToString();       
+            imageServerIPInput.Text= IPAddress.Loopback.ToString();  
+            limboStandIPInput.Text  = IPAddress.Loopback.ToString();
+            ipadIPInput.Text = IPAddress.Loopback.ToString();        
+
+
+
+
             statusIndicator.Fill = new SolidColorBrush(Colors.Red);
 
-            sourceEndPoint.Address = IPAddress.Parse("192.168.0.114");
-            sourceEndPoint.Port = Convert.ToInt32(12345);
+            //sourceEndPoint.Address = IPAddress.Parse("192.168.0.114");
+            //sourceEndPoint.Port = Convert.ToInt32(12345);
             oscCmdServer = new OscServer(TransportType.Udp, IPAddress.Loopback, Port);
             oscCmdServer.FilterRegisteredMethods = false;
             //oscCmdServer.RegisterMethod(oscCmd);
@@ -62,6 +85,9 @@ namespace MainController
             oscCmdServer.ConsumeParsingExceptions = false;
             oscCmdServer.Start();
 
+
+
+
         }
 
         private void oscCmdServer_BundleReceived(object sender, OscBundleReceivedEventArgs e)
@@ -72,12 +98,10 @@ namespace MainController
            
             this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
             {
-                ConsoleBlock.Text = string.Format("\nBundle Received [{0}:{1}]: Nested Bundles: {2} Nested Messages: {3}", bundle.SourceEndPoint.Address, bundle.TimeStamp, bundle.Bundles.Count, bundle.Messages.Count); // 해당 소스
                 statusIndicator.Fill = new SolidColorBrush(Colors.Green);
             }));
-            //ConsoleBlock.Text = string.Format("\nBundle Received [{0}:{1}]: Nested Bundles: {2} Nested Messages: {3}", bundle.SourceEndPoint.Address, bundle.TimeStamp, bundle.Bundles.Count, bundle.Messages.Count);
-            //Console.WriteLine(string.Format("\nBundle Received [{0}:{1}]: Nested Bundles: {2} Nested Messages: {3}", bundle.SourceEndPoint.Address, bundle.TimeStamp, bundle.Bundles.Count, bundle.Messages.Count));
-            //Console.WriteLine("Total Bundles Received: {0}", sBundlesReceivedCount);
+            Console.WriteLine(string.Format("\nBundle Received [{0}:{1}]: Nested Bundles: {2} Nested Messages: {3}", bundle.SourceEndPoint.Address, bundle.TimeStamp, bundle.Bundles.Count, bundle.Messages.Count));
+            Console.WriteLine("Total Bundles Received: {0}", sBundlesReceivedCount);
             
         }
 
@@ -120,12 +144,79 @@ namespace MainController
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            msg = new OscMessage(sourceEndPoint, oscCmd);
-            msg.Append((float)1.0);
-            msg.Append((float)4.0);
-            msg.Send(sourceEndPoint);
+            //msg = new OscMessage(sourceEndPoint, oscCmd);
+            //msg.Append((float)1.0);
+            //msg.Append((float)4.0);
+            //msg.Send(sourceEndPoint);
 
         }
-	
+
+        private void TestButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void IPSetButton_Click(object sender, RoutedEventArgs e)
+        {
+            Port = Convert.ToInt32(portInput.Text);
+            kinectFrontIP.Address = IPAddress.Parse(kinectFrontIPInput.Text);
+            kinectFrontIP.Port = Port;
+            kinectBackIP.Address = IPAddress.Parse(kinectBackIPInput.Text);
+            kinectBackIP.Port = Port;
+            limboDisplayIP.Address = IPAddress.Parse(limboViewerIPInput.Text);
+            limboDisplayIP.Port = Port;
+            imageServerIP.Address = IPAddress.Parse(imageServerIPInput.Text);
+            imageServerIP.Port = Port;
+            limboIP.Address = IPAddress.Parse(limboStandIPInput.Text);
+            limboIP.Port = Port;
+            ipadIP.Address = IPAddress.Parse(ipadIPInput.Text);
+            ipadIP.Port = Port;
+
+            
+
+        }
+
+        private void comms_connect_Click(object sender, RoutedEventArgs e)
+        {
+            if ((string)comms_connect.Content == "Connect")
+            {
+                //Sets up serial port
+                serial.PortName = comm_ports.Text;
+                serial.BaudRate = Convert.ToInt32(comm_speed.Text);
+                serial.Handshake = System.IO.Ports.Handshake.None;
+                serial.Parity = Parity.None;
+                serial.DataBits = 8;
+                serial.StopBits = StopBits.One;
+                serial.ReadTimeout = 200;
+                serial.WriteTimeout = 50;
+                serial.Open();
+                comms_connect.Content = "Disconnect";
+                serial.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(serialRxHandler);
+            }
+            else
+            {
+                serial.Close();
+                comms_connect.Content = "Connect";
+                
+            }
+        }
+
+        private delegate void UpdateUiTextDelegate(string text);
+        private void serialRxHandler(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
+        {
+            // Collecting the characters received to our 'buffer' (string).
+            serialRxData = serial.ReadExisting();
+            Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(showRxData), serialRxData);
+        }
+        private void showRxData(string text)
+        {
+            // Assign the value of the recieved_data to the RichTextBox.
+            para.Inlines.Add(text);
+            mcFlowDoc.Blocks.Add(para);
+            commData.Document = mcFlowDoc;
+        }
+
+
+      
     }
 }
