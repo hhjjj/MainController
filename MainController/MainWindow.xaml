@@ -11,7 +11,7 @@
         <Button Content="Button" HorizontalAlignment="Left" Margin="417,264,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
         <ComboBox x:Name="comm_ports" HorizontalAlignment="Left" Margin="10,107,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{Binding Source={StaticResource ComPorts}}"/>
         <ComboBox x:Name="comm_speed" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{Binding Source={StaticResource ComSpeed}}" />
-        <Ellipse x:Name="statusIndicator" Fill="Red" HorizontalAlignment="Left" Height="34" Margin="51,186,0,0" VerticalAlignment="Top" Width="34"/>
+        <Ellipse x:Name="statusIndicator" Fill="Red" HorizontalAlignment="Left" Height="34" Margin="54,252,0,0" VerticalAlignment="Top" Width="34"/>
 
     </Grid>
 </Window>
