@@ -12,65 +12,65 @@
             <RowDefinition Height="0*"/>
         </Grid.RowDefinitions>
         <Button x:Name="TestButton" Content="Test All" HorizontalAlignment="Left" Margin="763,539,0,0" VerticalAlignment="Top" Width="76" Click="TestButton_Click" Height="22"/>
-        <ComboBox x:Name="comm_ports" IsEditable="True" IsReadOnly="True" Text="Ports" HorizontalAlignment="Left" Margin="151,402,0,0" VerticalAlignment="Top" Width="58" ItemsSource="{Binding Source={StaticResource ComPorts}}" Height="22"/>
-        <ComboBox x:Name="comm_speed" IsEditable="True" IsReadOnly="True" Text="Baud Rate" HorizontalAlignment="Left" Margin="214,402,0,0" VerticalAlignment="Top" Width="84" ItemsSource="{Binding Source={StaticResource ComSpeed}}" Height="22" />
-        <Ellipse x:Name="statusIndicator" Fill="Red" HorizontalAlignment="Left" Height="26" Margin="631,306,0,0" VerticalAlignment="Top" Width="26"/>
-        <Label Content="Kinect Front" HorizontalAlignment="Left" Margin="53,68,0,0" VerticalAlignment="Top" Width="92" Height="26">
+        <ComboBox x:Name="comm_ports" IsEditable="True" IsReadOnly="True" Text="Ports" HorizontalAlignment="Left" Margin="125,402,0,0" VerticalAlignment="Top" Width="58" ItemsSource="{Binding Source={StaticResource ComPorts}}" Height="22"/>
+        <ComboBox x:Name="comm_speed" IsEditable="True" IsReadOnly="True" Text="Baud Rate" HorizontalAlignment="Left" Margin="188,402,0,0" VerticalAlignment="Top" Width="84" ItemsSource="{Binding Source={StaticResource ComSpeed}}" Height="22" />
+        <Ellipse x:Name="statusIndicator" Fill="Red" HorizontalAlignment="Left" Height="26" Margin="682,539,0,0" VerticalAlignment="Top" Width="26"/>
+        <Label Content="Kinect Front" HorizontalAlignment="Left" Margin="27,68,0,0" VerticalAlignment="Top" Width="92" Height="26">
             <Label.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuHighlightColorKey}}"/>
             </Label.Background>
         </Label>
-        <Label Content="Kinect Back" HorizontalAlignment="Left" Margin="53,98,0,0" VerticalAlignment="Top" Width="92" Height="26">
+        <Label Content="Kinect Back" HorizontalAlignment="Left" Margin="27,98,0,0" VerticalAlignment="Top" Width="92" Height="26">
             <Label.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuHighlightColorKey}}"/>
             </Label.Background>
         </Label>
-        <Label Content="Limbo Viewer" HorizontalAlignment="Left" Margin="53,130,0,0" VerticalAlignment="Top" Width="92" Height="26">
+        <Label Content="Limbo Viewer" HorizontalAlignment="Left" Margin="27,130,0,0" VerticalAlignment="Top" Width="92" Height="26">
             <Label.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuHighlightColorKey}}"/>
             </Label.Background>
         </Label>
-        <Label Content="Image Server" HorizontalAlignment="Left" Margin="53,160,0,0" VerticalAlignment="Top" Width="92" Height="26">
+        <Label Content="Image Server" HorizontalAlignment="Left" Margin="27,160,0,0" VerticalAlignment="Top" Width="92" Height="26">
             <Label.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuHighlightColorKey}}"/>
             </Label.Background>
         </Label>
-        <Label Content="Limbo Stand" HorizontalAlignment="Left" Margin="53,192,0,0" VerticalAlignment="Top" Width="92" Height="26">
+        <Label Content="Limbo Stand" HorizontalAlignment="Left" Margin="27,192,0,0" VerticalAlignment="Top" Width="92" Height="26">
             <Label.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuHighlightColorKey}}"/>
             </Label.Background>
         </Label>
-        <Label Content="iPad" HorizontalAlignment="Left" Margin="53,222,0,0" VerticalAlignment="Top" Width="92" Height="26">
+        <Label Content="iPad" HorizontalAlignment="Left" Margin="27,222,0,0" VerticalAlignment="Top" Width="92" Height="26">
             <Label.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuHighlightColorKey}}"/>
             </Label.Background>
         </Label>
-        <TextBox x:Name="kinectFrontIPInput" HorizontalAlignment="Left" Height="23" Margin="160,71,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="kinectBackIPInput" HorizontalAlignment="Left" Height="23" Margin="160,101,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="limboViewerIPInput" HorizontalAlignment="Left" Height="23" Margin="160,133,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="imageServerIPInput" HorizontalAlignment="Left" Height="23" Margin="160,163,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="limboStandIPInput" HorizontalAlignment="Left" Height="23" Margin="160,195,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="ipadIPInput" HorizontalAlignment="Left" Height="23" Margin="160,225,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Remote" HorizontalAlignment="Left" Margin="54,400,0,0" VerticalAlignment="Top" Width="92" Height="26">
+        <TextBox x:Name="kinectFrontIPInput" HorizontalAlignment="Left" Height="23" Margin="134,71,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="kinectBackIPInput" HorizontalAlignment="Left" Height="23" Margin="134,101,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="limboViewerIPInput" HorizontalAlignment="Left" Height="23" Margin="134,133,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="imageServerIPInput" HorizontalAlignment="Left" Height="23" Margin="134,163,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="limboStandIPInput" HorizontalAlignment="Left" Height="23" Margin="134,195,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="ipadIPInput" HorizontalAlignment="Left" Height="23" Margin="134,225,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Remote" HorizontalAlignment="Left" Margin="28,400,0,0" VerticalAlignment="Top" Width="92" Height="26">
             <Label.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuHighlightColorKey}}"/>
             </Label.Background>
         </Label>
-        <Label Content="Set IP Addresses" HorizontalAlignment="Left" Margin="54,35,0,0" VerticalAlignment="Top" Width="310" Height="26">
+        <Label Content="Set IP Addresses" HorizontalAlignment="Left" Margin="28,35,0,0" VerticalAlignment="Top" Width="310" Height="26">
             <Label.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveCaptionColorKey}}"/>
             </Label.Background>
         </Label>
-        <Label Content="Set RS-232 COMM Port" HorizontalAlignment="Left" Margin="54,369,0,0" VerticalAlignment="Top" Width="310" Height="26">
+        <Label Content="Set RS-232 COMM Port" HorizontalAlignment="Left" Margin="28,369,0,0" VerticalAlignment="Top" Width="310" Height="26">
             <Label.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveCaptionColorKey}}"/>
             </Label.Background>
         </Label>
-        <Button x:Name="IPSetButton" Content="Apply" HorizontalAlignment="Left" Margin="288,290,0,0" VerticalAlignment="Top" Width="76" Click="IPSetButton_Click" Height="22"/>
-        <TextBox x:Name="portInput" HorizontalAlignment="Left" Height="23" Margin="159,255,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <Label Content="OSC Port" HorizontalAlignment="Left" Margin="82,252,0,0" VerticalAlignment="Top" Width="64" Height="26"/>
-        <Button x:Name="comms_connect" Content="Connect" HorizontalAlignment="Left" Margin="289,449,0,0" VerticalAlignment="Top" Width="75" Click="comms_connect_Click"/>
-        <RichTextBox x:Name="commData" HorizontalAlignment="Left" Height="147" Margin="54,514,0,0" VerticalAlignment="Top" Width="310" VerticalScrollBarVisibility="Auto">
+        <Button x:Name="IPSetButton" Content="Apply" HorizontalAlignment="Left" Margin="262,290,0,0" VerticalAlignment="Top" Width="76" Click="IPSetButton_Click" Height="22"/>
+        <TextBox x:Name="portInput" HorizontalAlignment="Left" Height="23" Margin="133,255,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <Label Content="OSC Port" HorizontalAlignment="Left" Margin="56,252,0,0" VerticalAlignment="Top" Width="64" Height="26"/>
+        <Button x:Name="comms_connect" Content="Connect" HorizontalAlignment="Left" Margin="263,449,0,0" VerticalAlignment="Top" Width="75" Click="comms_connect_Click"/>
+        <RichTextBox x:Name="commData" HorizontalAlignment="Left" Height="147" Margin="28,514,0,0" VerticalAlignment="Top" Width="310" VerticalScrollBarVisibility="Auto">
             <FlowDocument>
                 <Paragraph>
                     <Run Text="RichTextBox"/>
