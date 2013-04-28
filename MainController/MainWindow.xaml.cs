@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using System.Net;
+using System.Net.Sockets;
 using Bespoke.Common;
 using Bespoke.Common.Osc;
 
@@ -75,8 +76,8 @@ namespace MainController
             //sourceEndPoint.Address = IPAddress.Parse("192.168.0.114");
             //sourceEndPoint.Port = Convert.ToInt32(12345);
 
-            //oscCmdServer = new OscServer(TransportType.Udp, IPAddress.Loopback, Port);
-            oscCmdServer = new OscServer(IPAddress.Parse("224.25.26.27"), Port);
+            oscCmdServer = new OscServer(TransportType.Udp, IPAddress.Parse(LocalIPAddress()), Port);
+            //oscCmdServer = new OscServer(IPAddress.Parse("224.25.26.27"), Port);
             oscCmdServer.FilterRegisteredMethods = false;
             //oscCmdServer.RegisterMethod(oscCmd);
             oscCmdServer.RegisterMethod(oscCmd);
@@ -220,7 +221,25 @@ namespace MainController
             commData.Document = mcFlowDoc;
         }
 
+        private string LocalIPAddress()
+        {
+            if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+            {
+                return null;
+            }
 
+            IPHostEntry host;
+            string localIP = "";
+            host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (IPAddress ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    localIP = ip.ToString();
+                }
+            }
+            return localIP;
+        }
       
     }
 }
