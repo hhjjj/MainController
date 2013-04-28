@@ -105,6 +105,10 @@
   <ItemGroup>
     <Resource Include="CommsData.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Bespoke.Common.dll" />
+    <Content Include="Bespoke.Common.Osc.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

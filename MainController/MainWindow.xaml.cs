@@ -74,7 +74,9 @@ namespace MainController
 
             //sourceEndPoint.Address = IPAddress.Parse("192.168.0.114");
             //sourceEndPoint.Port = Convert.ToInt32(12345);
-            oscCmdServer = new OscServer(TransportType.Udp, IPAddress.Loopback, Port);
+
+            //oscCmdServer = new OscServer(TransportType.Udp, IPAddress.Loopback, Port);
+            oscCmdServer = new OscServer(IPAddress.Parse("224.25.26.27"), Port);
             oscCmdServer.FilterRegisteredMethods = false;
             //oscCmdServer.RegisterMethod(oscCmd);
             oscCmdServer.RegisterMethod(oscCmd);
