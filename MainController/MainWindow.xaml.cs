@@ -32,7 +32,7 @@ namespace MainController
     {
         OscServer oscCmdServer;
         private static int Port = 8000;
-        private static readonly string oscCmd = "/limbo/cmd";
+        private static readonly string oscCmd = "/kinect/1";
 
         OscMessage msg;
 
@@ -77,8 +77,8 @@ namespace MainController
             oscCmdServer = new OscServer(TransportType.Udp, IPAddress.Loopback, Port);
             oscCmdServer.FilterRegisteredMethods = false;
             //oscCmdServer.RegisterMethod(oscCmd);
-            oscCmdServer.RegisterMethod(AliveMethod);
-            oscCmdServer.RegisterMethod(TestMethod);
+            oscCmdServer.RegisterMethod(oscCmd);
+            //oscCmdServer.RegisterMethod(TestMethod);
             oscCmdServer.BundleReceived += new EventHandler<OscBundleReceivedEventArgs>(oscCmdServer_BundleReceived);
             oscCmdServer.MessageReceived += new EventHandler<OscMessageReceivedEventArgs>(oscCmdServer_MessageReceived);
             oscCmdServer.ReceiveErrored += new EventHandler<ExceptionEventArgs>(oscCmdServer_ReceiveErrored);
@@ -153,7 +153,9 @@ namespace MainController
 
         private void TestButton_Click(object sender, RoutedEventArgs e)
         {
-
+            msg = new OscMessage(kinectFrontIP, oscCmd);
+            msg.Append("Stop");
+            msg.Send(kinectFrontIP);
         }
 
         private void IPSetButton_Click(object sender, RoutedEventArgs e)
