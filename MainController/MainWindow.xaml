@@ -77,6 +77,8 @@
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
+        <Rectangle x:Name="frontStatus" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="100" Margin="451,192,0,0" VerticalAlignment="Top" Width="215"/>
+        <Rectangle x:Name="backStatus" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="100" Margin="682,192,0,0" VerticalAlignment="Top" Width="215"/>
 
     </Grid>
 </Window>

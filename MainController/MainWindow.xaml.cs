@@ -33,7 +33,8 @@ namespace MainController
     {
         OscServer oscCmdServer;
         private static int Port = 8000;
-        private static readonly string oscCmd = "/kinect/1";
+        private static readonly string kinectFrontCmd = "/kinect/1";
+        private static readonly string kinectBackCmd = "/kinect/2";
 
         OscMessage msg;
 
@@ -49,6 +50,9 @@ namespace MainController
         string serialRxData;
         FlowDocument mcFlowDoc = new FlowDocument();
         Paragraph para = new Paragraph();
+
+        private bool kinectFrontOff;
+        private bool kinectBackOff;
 
         public MainWindow()
         {
@@ -78,9 +82,10 @@ namespace MainController
 
             oscCmdServer = new OscServer(TransportType.Udp, IPAddress.Parse(LocalIPAddress()), Port);
             //oscCmdServer = new OscServer(IPAddress.Parse("224.25.26.27"), Port);
-            oscCmdServer.FilterRegisteredMethods = false;
+            oscCmdServer.FilterRegisteredMethods = true;
             //oscCmdServer.RegisterMethod(oscCmd);
-            oscCmdServer.RegisterMethod(oscCmd);
+            oscCmdServer.RegisterMethod(kinectFrontCmd);
+            oscCmdServer.RegisterMethod(kinectBackCmd);
             //oscCmdServer.RegisterMethod(TestMethod);
             oscCmdServer.BundleReceived += new EventHandler<OscBundleReceivedEventArgs>(oscCmdServer_BundleReceived);
             oscCmdServer.MessageReceived += new EventHandler<OscMessageReceivedEventArgs>(oscCmdServer_MessageReceived);
@@ -108,7 +113,7 @@ namespace MainController
             
         }
 
-        private static void oscCmdServer_MessageReceived(object sender, OscMessageReceivedEventArgs e)
+        private void oscCmdServer_MessageReceived(object sender, OscMessageReceivedEventArgs e)
 		{
             sMessagesReceivedCount++;
 
@@ -117,6 +122,65 @@ namespace MainController
             Console.WriteLine(string.Format("\nMessage Received [{0}]: {1}", message.SourceEndPoint.Address, message.Address));
             Console.WriteLine(string.Format("Message contains {0} objects.", message.Data.Count));
 
+            if (message.Address == kinectFrontCmd)
+            {
+                if (message.Data[0].ToString() == "IN")
+                {
+                    this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+                    {
+                        frontStatus.Fill = new SolidColorBrush(Colors.Red);
+                    }));
+                }
+
+                if (message.Data[0].ToString() == "OUT")
+                {
+                    this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+                    {
+                        frontStatus.Fill = new SolidColorBrush(Colors.Blue);
+                    }));
+                    msg = new OscMessage(kinectFrontIP, kinectFrontCmd);
+                    msg.Append("STOP");
+                    msg.Send(kinectFrontIP);
+
+                    msg = new OscMessage(kinectBackIP, kinectBackCmd);
+                    msg.Append("START");
+                    msg.Send(kinectBackIP);
+                }
+            }
+
+            if (message.Address == kinectBackCmd)
+            {
+                if (message.Data[0].ToString() == "IN")
+                {
+                    this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+                    {
+                        backStatus.Fill = new SolidColorBrush(Colors.Red);
+                        msg = new OscMessage(kinectBackIP, kinectBackCmd);
+                        msg.Append("STOP");
+                        msg.Send(kinectBackIP);
+
+                        msg = new OscMessage(kinectFrontIP, kinectFrontCmd);
+                        msg.Append("START");
+                        msg.Send(kinectFrontIP);
+                    }));
+                }
+
+                if (message.Data[0].ToString() == "OUT")
+                {
+                    this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+                    {
+                        backStatus.Fill = new SolidColorBrush(Colors.Blue);
+
+                        msg = new OscMessage(kinectBackIP, kinectBackCmd);
+                        msg.Append("STOP");
+                        msg.Send(kinectBackIP);
+
+                        msg = new OscMessage(kinectFrontIP, kinectFrontCmd);
+                        msg.Append("START");
+                        msg.Send(kinectFrontIP);
+                    }));
+                }
+            }
             for (int i = 0; i < message.Data.Count; i++)
             {
                 string dataString;
@@ -156,7 +220,7 @@ namespace MainController
 
         private void TestButton_Click(object sender, RoutedEventArgs e)
         {
-            msg = new OscMessage(kinectFrontIP, oscCmd);
+            msg = new OscMessage(kinectFrontIP, kinectFrontCmd);
             msg.Append("Stop");
             msg.Send(kinectFrontIP);
         }
