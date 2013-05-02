@@ -49,7 +49,7 @@ namespace MainController {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.0.111")]
         public string limboViewerIPSetting {
             get {
                 return ((string)(this["limboViewerIPSetting"]));
@@ -61,7 +61,7 @@ namespace MainController {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.0.114")]
         public string imageServerIPSetting {
             get {
                 return ((string)(this["imageServerIPSetting"]));
@@ -73,7 +73,7 @@ namespace MainController {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("127.0.0.1")]
         public string limboStandIPSetting {
             get {
                 return ((string)(this["limboStandIPSetting"]));
@@ -85,7 +85,7 @@ namespace MainController {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("127.0.0.1")]
         public string iPadIPSetting {
             get {
                 return ((string)(this["iPadIPSetting"]));

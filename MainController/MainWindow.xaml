@@ -83,6 +83,18 @@
         </RichTextBox>
         <Rectangle x:Name="frontStatus" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="100" Margin="451,192,0,0" VerticalAlignment="Top" Width="215" Grid.ColumnSpan="2"/>
         <Rectangle x:Name="backStatus" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="100" Margin="187,192,0,0" VerticalAlignment="Top" Width="215" Grid.Column="1"/>
+        <Button x:Name="slideSceneButton" Grid.ColumnSpan="2" Content="Slide Scene" HorizontalAlignment="Left" Margin="440,46,0,0" VerticalAlignment="Top" Width="115" Height="30" Click="slideSceneButton_Click"/>
+        <Button x:Name="exerciseSceneButton" Content="Exercise Scene" HorizontalAlignment="Left" Margin="129,46,0,0" VerticalAlignment="Top" Width="115" Height="30" Grid.Column="1" Click="exerciseSceneButton_Click"/>
+        <Button x:Name="limboSceneButton" Content="Limbo Scene" HorizontalAlignment="Left" Margin="300,46,0,0" VerticalAlignment="Top" Width="115" Height="30" Grid.Column="1" Click="limboSceneButton_Click"/>
+        <Button Content="Limbo Set" HorizontalAlignment="Left" Margin="478,122,0,0" VerticalAlignment="Top" Width="75" Grid.ColumnSpan="2"/>
+        <Button Content="Picture" HorizontalAlignment="Left" Margin="313,81,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1"/>
+        <Button x:Name="successButton" Content="Success" HorizontalAlignment="Left" Margin="269,108,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="successButton_Click"/>
+        <Button x:Name="failButton" Content="Fail" HorizontalAlignment="Left" Margin="359,108,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="failButton_Click"/>
+        <RadioButton GroupName="LimboSet" Content="3.0" HorizontalAlignment="Left" Margin="440,128,0,0" VerticalAlignment="Top" />
+        <RadioButton GroupName="LimboSet" Content="4.0" HorizontalAlignment="Left" Margin="440,108,0,0" VerticalAlignment="Top"/>
+        <RadioButton GroupName="LimboSet" Content="5.0" HorizontalAlignment="Left" Margin="440,87,0,0" VerticalAlignment="Top" IsChecked="True"/>
+        <TextBlock x:Name="myIPAddrText" Grid.Column="1" HorizontalAlignment="Left" Margin="221,695,0,0" TextWrapping="Wrap" Text="IP Address" VerticalAlignment="Top" Width="98"/>
+        <Label Content="My IP Addr" Grid.Column="1" HorizontalAlignment="Left" Margin="140,690,0,0" VerticalAlignment="Top" Width="81"/>
 
     </Grid>
 </Window>

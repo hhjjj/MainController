@@ -24,6 +24,8 @@ using System.IO.Ports;
 
 using ExceptionEventArgs = Bespoke.Common.ExceptionEventArgs;
 
+using System.Reflection;
+
 namespace MainController
 {
     /// <summary>
@@ -40,9 +42,9 @@ namespace MainController
 
         private static IPEndPoint kinectFrontIP = new IPEndPoint(IPAddress.Loopback, Port);
         private static IPEndPoint kinectBackIP = new IPEndPoint(IPAddress.Loopback, Port);
-        private static IPEndPoint limboDisplayIP = new IPEndPoint(IPAddress.Loopback, Port);
+        private static IPEndPoint limboViewerIP = new IPEndPoint(IPAddress.Loopback, Port);
         private static IPEndPoint imageServerIP = new IPEndPoint(IPAddress.Loopback, Port);
-        private static IPEndPoint limboIP = new IPEndPoint(IPAddress.Loopback, Port);
+        private static IPEndPoint limboStandIP = new IPEndPoint(IPAddress.Loopback, Port);
         private static IPEndPoint ipadIP = new IPEndPoint(IPAddress.Loopback, Port);
 
 
@@ -54,24 +56,50 @@ namespace MainController
         private bool kinectFrontOff;
         private bool kinectBackOff;
 
+        DispatcherTimer dispatcherTimer;
+
         public MainWindow()
         {
             InitializeComponent();
+
             
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+            dispatcherTimer.Start();
+
             comms_connect.Content = "Connect";
 
-            portInput.Text = MySettings.Default.portSetting.ToString();
+            Port = MySettings.Default.portSetting;
+            kinectFrontIP.Address = IPAddress.Parse(MySettings.Default.kinectFrontIPSetting);
+            kinectFrontIP.Port = Port;
+            kinectBackIP.Address = IPAddress.Parse(MySettings.Default.kinectBackIPSetting);
+            kinectBackIP.Port = Port;
+            limboViewerIP.Address = IPAddress.Parse(MySettings.Default.limboViewerIPSetting);
+            limboViewerIP.Port = Port;
+            imageServerIP.Address = IPAddress.Parse(MySettings.Default.imageServerIPSetting);
+            imageServerIP.Port = Port;
+            limboStandIP.Address = IPAddress.Parse(MySettings.Default.limboStandIPSetting);
+            limboStandIP.Port = Port;
+            ipadIP.Address = IPAddress.Parse(MySettings.Default.iPadIPSetting);
+            ipadIP.Port = Port;
+
+
+            portInput.Text = Port.ToString();
             kinectFrontIPInput.Text = MySettings.Default.kinectFrontIPSetting;
             kinectBackIPInput.Text = MySettings.Default.kinectBackIPSetting;
             limboViewerIPInput.Text = MySettings.Default.limboViewerIPSetting;
             imageServerIPInput.Text = MySettings.Default.imageServerIPSetting;
             limboStandIPInput.Text = MySettings.Default.limboStandIPSetting;
-            ipadIPInput.Text = MySettings.Default.iPadIPSetting;      
+            ipadIPInput.Text = MySettings.Default.iPadIPSetting;
 
+
+
+            myIPAddrText.Text = LocalIPAddress();
             
 
 
@@ -233,12 +261,12 @@ namespace MainController
             kinectFrontIP.Port = Port;
             kinectBackIP.Address = IPAddress.Parse(kinectBackIPInput.Text);
             kinectBackIP.Port = Port;
-            limboDisplayIP.Address = IPAddress.Parse(limboViewerIPInput.Text);
-            limboDisplayIP.Port = Port;
+            limboViewerIP.Address = IPAddress.Parse(limboViewerIPInput.Text);
+            limboViewerIP.Port = Port;
             imageServerIP.Address = IPAddress.Parse(imageServerIPInput.Text);
             imageServerIP.Port = Port;
-            limboIP.Address = IPAddress.Parse(limboStandIPInput.Text);
-            limboIP.Port = Port;
+            limboStandIP.Address = IPAddress.Parse(limboStandIPInput.Text);
+            limboStandIP.Port = Port;
             ipadIP.Address = IPAddress.Parse(ipadIPInput.Text);
             ipadIP.Port = Port;
 
@@ -317,6 +345,51 @@ namespace MainController
         {
             MySettings.Default.Save();
         }
+
+        private void slideSceneButton_Click(object sender, RoutedEventArgs e)
+        {
+            msg = new OscMessage(limboViewerIP, "/scene/");
+            msg.Append((Int32)1);
+            msg.Send(limboViewerIP);
+            
+        }
+
+        private void exerciseSceneButton_Click(object sender, RoutedEventArgs e)
+        {
+            msg = new OscMessage(limboViewerIP, "/scene/");
+            msg.Append((Int32)2);
+            msg.Send(limboViewerIP);
+        }
+
+        private void limboSceneButton_Click(object sender, RoutedEventArgs e)
+        {
+            msg = new OscMessage(limboViewerIP, "/scene/");
+            msg.Append((Int32)3);
+            msg.Send(limboViewerIP);
+        }
+
+        private void successButton_Click(object sender, RoutedEventArgs e)
+        {   
+            typeof(Button).GetMethod("set_IsPressed", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(failButton, new object[] { true });
+            typeof(Button).GetMethod("set_IsPressed", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(failButton, new object[] { false });
+            failButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            
+        }
+
+        private void failButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            Console.WriteLine("sec");
+
+            // Forcing the CommandManager to raise the RequerySuggested event
+            CommandManager.InvalidateRequerySuggested();
+        }
+
       
     }
 }

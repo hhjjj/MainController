@@ -9,16 +9,16 @@
       <Value Profile="(Default)">192.168.0.110</Value>
     </Setting>
     <Setting Name="limboViewerIPSetting" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">192.168.0.111</Value>
     </Setting>
     <Setting Name="imageServerIPSetting" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">192.168.0.114</Value>
     </Setting>
     <Setting Name="limboStandIPSetting" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">127.0.0.1</Value>
     </Setting>
     <Setting Name="iPadIPSetting" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">127.0.0.1</Value>
     </Setting>
     <Setting Name="portSetting" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">8000</Value>
