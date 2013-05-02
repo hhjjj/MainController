@@ -1,20 +1,24 @@
 ﻿<Window x:Class="MainController.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="768" Loaded="Window_Loaded" Width="1024">
+        Title="MainWindow" Height="768" Loaded="Window_Loaded" Width="1024" Closing="Window_Closing">
     <Window.Resources>
         <XmlDataProvider x:Key="ComPorts" Source="CommsData.xml" XPath="/Comms/Ports" />
         <XmlDataProvider x:Key="ComSpeed" Source="CommsData.xml" XPath="/Comms/Baud" />
     </Window.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="495*"/>
+            <ColumnDefinition Width="521*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="0*"/>
         </Grid.RowDefinitions>
-        <Button x:Name="TestButton" Content="Test All" HorizontalAlignment="Left" Margin="763,539,0,0" VerticalAlignment="Top" Width="76" Click="TestButton_Click" Height="22"/>
+        <Button x:Name="TestButton" Content="Test All" HorizontalAlignment="Left" Margin="268,539,0,0" VerticalAlignment="Top" Width="76" Click="TestButton_Click" Height="22" Grid.Column="1"/>
         <ComboBox x:Name="comm_ports" IsEditable="True" IsReadOnly="True" Text="Ports" HorizontalAlignment="Left" Margin="125,402,0,0" VerticalAlignment="Top" Width="58" ItemsSource="{Binding Source={StaticResource ComPorts}}" Height="22"/>
         <ComboBox x:Name="comm_speed" IsEditable="True" IsReadOnly="True" Text="Baud Rate" HorizontalAlignment="Left" Margin="188,402,0,0" VerticalAlignment="Top" Width="84" ItemsSource="{Binding Source={StaticResource ComSpeed}}" Height="22" />
-        <Ellipse x:Name="statusIndicator" Fill="Red" HorizontalAlignment="Left" Height="26" Margin="682,539,0,0" VerticalAlignment="Top" Width="26"/>
+        <Ellipse x:Name="statusIndicator" Fill="Red" HorizontalAlignment="Left" Height="26" Margin="187,539,0,0" VerticalAlignment="Top" Width="26" Grid.Column="1"/>
         <Label Content="Kinect Front" HorizontalAlignment="Left" Margin="27,68,0,0" VerticalAlignment="Top" Width="92" Height="26">
             <Label.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuHighlightColorKey}}"/>
@@ -77,8 +81,8 @@
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
-        <Rectangle x:Name="frontStatus" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="100" Margin="451,192,0,0" VerticalAlignment="Top" Width="215"/>
-        <Rectangle x:Name="backStatus" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="100" Margin="682,192,0,0" VerticalAlignment="Top" Width="215"/>
+        <Rectangle x:Name="frontStatus" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="100" Margin="451,192,0,0" VerticalAlignment="Top" Width="215" Grid.ColumnSpan="2"/>
+        <Rectangle x:Name="backStatus" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="100" Margin="187,192,0,0" VerticalAlignment="Top" Width="215" Grid.Column="1"/>
 
     </Grid>
 </Window>

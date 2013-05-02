@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MainController" GeneratedClassName="MySettings">
+  <Profiles />
+  <Settings>
+    <Setting Name="kinectFrontIPSetting" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.0.111</Value>
+    </Setting>
+    <Setting Name="kinectBackIPSetting" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.0.110</Value>
+    </Setting>
+    <Setting Name="limboViewerIPSetting" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="imageServerIPSetting" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="limboStandIPSetting" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="iPadIPSetting" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="portSetting" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">8000</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

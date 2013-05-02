@@ -64,14 +64,15 @@ namespace MainController
         {
             comms_connect.Content = "Connect";
 
-            portInput.Text = Port.ToString();
-            kinectFrontIPInput.Text = IPAddress.Loopback.ToString();
-            kinectBackIPInput.Text = IPAddress.Loopback.ToString();   
-            limboViewerIPInput.Text = IPAddress.Loopback.ToString();       
-            imageServerIPInput.Text= IPAddress.Loopback.ToString();  
-            limboStandIPInput.Text  = IPAddress.Loopback.ToString();
-            ipadIPInput.Text = IPAddress.Loopback.ToString();        
+            portInput.Text = MySettings.Default.portSetting.ToString();
+            kinectFrontIPInput.Text = MySettings.Default.kinectFrontIPSetting;
+            kinectBackIPInput.Text = MySettings.Default.kinectBackIPSetting;
+            limboViewerIPInput.Text = MySettings.Default.limboViewerIPSetting;
+            imageServerIPInput.Text = MySettings.Default.imageServerIPSetting;
+            limboStandIPInput.Text = MySettings.Default.limboStandIPSetting;
+            ipadIPInput.Text = MySettings.Default.iPadIPSetting;      
 
+            
 
 
 
@@ -241,6 +242,13 @@ namespace MainController
             ipadIP.Address = IPAddress.Parse(ipadIPInput.Text);
             ipadIP.Port = Port;
 
+            MySettings.Default.portSetting = Port;
+            MySettings.Default.kinectFrontIPSetting = kinectFrontIPInput.Text;
+            MySettings.Default.kinectBackIPSetting = kinectBackIPInput.Text;
+            MySettings.Default.limboViewerIPSetting = limboViewerIPInput.Text;
+            MySettings.Default.imageServerIPSetting = imageServerIPInput.Text;
+            MySettings.Default.limboStandIPSetting = limboStandIPInput.Text;
+            MySettings.Default.iPadIPSetting = ipadIPInput.Text;
             
 
         }
@@ -303,6 +311,11 @@ namespace MainController
                 }
             }
             return localIP;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            MySettings.Default.Save();
         }
       
     }
