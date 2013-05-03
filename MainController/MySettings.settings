@@ -23,5 +23,11 @@
     <Setting Name="portSetting" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">8000</Value>
     </Setting>
+    <Setting Name="iPadMsgAddrSetting" Type="System.String" Scope="User">
+      <Value Profile="(Default)">/ipad</Value>
+    </Setting>
+    <Setting Name="iPadMsgArgSetting" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

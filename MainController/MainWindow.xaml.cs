@@ -37,6 +37,8 @@ namespace MainController
         private static int Port = 8000;
         private static readonly string kinectFrontCmd = "/kinect/1";
         private static readonly string kinectBackCmd = "/kinect/2";
+        private string iPadMsgAddr;
+        private int iPadMsgArg;
 
         OscMessage msg;
 
@@ -88,6 +90,11 @@ namespace MainController
             ipadIP.Address = IPAddress.Parse(MySettings.Default.iPadIPSetting);
             ipadIP.Port = Port;
 
+            iPadMsgAddr = MySettings.Default.iPadMsgAddrSetting;
+            iPadMsgArg = MySettings.Default.iPadMsgArgSetting;
+
+            iPadMsgAddrInput.Text = iPadMsgAddr;
+            iPadMsgArgInput.Text = iPadMsgArg.ToString();
 
             portInput.Text = Port.ToString();
             kinectFrontIPInput.Text = MySettings.Default.kinectFrontIPSetting;
@@ -232,8 +239,7 @@ namespace MainController
         {
             Console.WriteLine("Error during reception of packet: {0}", e.Exception.Message);
         }
-        private static readonly string AliveMethod = "/osctest/alive";
-        private static readonly string TestMethod = "/osctest/test";
+
 
         private static int sBundlesReceivedCount;
         private static int sMessagesReceivedCount;
@@ -348,7 +354,7 @@ namespace MainController
 
         private void slideSceneButton_Click(object sender, RoutedEventArgs e)
         {
-            msg = new OscMessage(limboViewerIP, "/scene/");
+            msg = new OscMessage(limboViewerIP, "/scene");
             msg.Append((Int32)1);
             msg.Send(limboViewerIP);
             
@@ -356,14 +362,14 @@ namespace MainController
 
         private void exerciseSceneButton_Click(object sender, RoutedEventArgs e)
         {
-            msg = new OscMessage(limboViewerIP, "/scene/");
+            msg = new OscMessage(limboViewerIP, "/scene");
             msg.Append((Int32)2);
             msg.Send(limboViewerIP);
         }
 
         private void limboSceneButton_Click(object sender, RoutedEventArgs e)
         {
-            msg = new OscMessage(limboViewerIP, "/scene/");
+            msg = new OscMessage(limboViewerIP, "/scene");
             msg.Append((Int32)3);
             msg.Send(limboViewerIP);
         }
@@ -388,6 +394,25 @@ namespace MainController
 
             // Forcing the CommandManager to raise the RequerySuggested event
             CommandManager.InvalidateRequerySuggested();
+        }
+
+        private void iPadTestButton_Click(object sender, RoutedEventArgs e)
+        {
+            msg = new OscMessage(ipadIP, iPadMsgAddr);
+            msg.Append(iPadMsgArg);
+            msg.Send(ipadIP);
+        }
+
+        private void iPadMsgAddrInput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            iPadMsgAddr = iPadMsgAddrInput.Text;
+            MySettings.Default.iPadMsgAddrSetting = iPadMsgAddr;
+        }
+
+        private void iPadMsgArgInput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            iPadMsgArg = Convert.ToInt32(iPadMsgArgInput.Text);
+            MySettings.Default.iPadMsgArgSetting = iPadMsgArg;
         }
 
       

@@ -6,7 +6,7 @@
         <XmlDataProvider x:Key="ComPorts" Source="CommsData.xml" XPath="/Comms/Ports" />
         <XmlDataProvider x:Key="ComSpeed" Source="CommsData.xml" XPath="/Comms/Baud" />
     </Window.Resources>
-    <Grid>
+    <Grid Margin="4,0,-4,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="495*"/>
             <ColumnDefinition Width="521*"/>
@@ -15,10 +15,10 @@
             <RowDefinition/>
             <RowDefinition Height="0*"/>
         </Grid.RowDefinitions>
-        <Button x:Name="TestButton" Content="Test All" HorizontalAlignment="Left" Margin="268,539,0,0" VerticalAlignment="Top" Width="76" Click="TestButton_Click" Height="22" Grid.Column="1"/>
+        <Button x:Name="TestButton" Content="Test All" HorizontalAlignment="Left" Margin="408,622,0,0" VerticalAlignment="Top" Width="76" Click="TestButton_Click" Height="22" Grid.Column="1"/>
         <ComboBox x:Name="comm_ports" IsEditable="True" IsReadOnly="True" Text="Ports" HorizontalAlignment="Left" Margin="125,402,0,0" VerticalAlignment="Top" Width="58" ItemsSource="{Binding Source={StaticResource ComPorts}}" Height="22"/>
         <ComboBox x:Name="comm_speed" IsEditable="True" IsReadOnly="True" Text="Baud Rate" HorizontalAlignment="Left" Margin="188,402,0,0" VerticalAlignment="Top" Width="84" ItemsSource="{Binding Source={StaticResource ComSpeed}}" Height="22" />
-        <Ellipse x:Name="statusIndicator" Fill="Red" HorizontalAlignment="Left" Height="26" Margin="187,539,0,0" VerticalAlignment="Top" Width="26" Grid.Column="1"/>
+        <Ellipse x:Name="statusIndicator" Fill="Red" HorizontalAlignment="Left" Height="26" Margin="327,622,0,0" VerticalAlignment="Top" Width="26" Grid.Column="1"/>
         <Label Content="Kinect Front" HorizontalAlignment="Left" Margin="27,68,0,0" VerticalAlignment="Top" Width="92" Height="26">
             <Label.Background>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.MenuHighlightColorKey}}"/>
@@ -95,6 +95,11 @@
         <RadioButton GroupName="LimboSet" Content="5.0" HorizontalAlignment="Left" Margin="440,87,0,0" VerticalAlignment="Top" IsChecked="True"/>
         <TextBlock x:Name="myIPAddrText" Grid.Column="1" HorizontalAlignment="Left" Margin="221,695,0,0" TextWrapping="Wrap" Text="IP Address" VerticalAlignment="Top" Width="98"/>
         <Label Content="My IP Addr" Grid.Column="1" HorizontalAlignment="Left" Margin="140,690,0,0" VerticalAlignment="Top" Width="81"/>
+        <Button x:Name="iPadTestButton" Content="iPad Test" Grid.Column="1" HorizontalAlignment="Left" Margin="327,356,0,0" VerticalAlignment="Top" Width="75" Click="iPadTestButton_Click"/>
+        <TextBox x:Name="iPadMsgAddrInput" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="110,356,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="81" TextChanged="iPadMsgAddrInput_TextChanged"/>
+        <TextBox x:Name="iPadMsgArgInput" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="211,355,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="81" TextChanged="iPadMsgArgInput_TextChanged"/>
+        <Label Content="string" Grid.Column="1" HorizontalAlignment="Left" Margin="151,379,0,0" VerticalAlignment="Top"/>
+        <Label Content="int" Grid.Column="1" HorizontalAlignment="Left" Margin="268,383,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
