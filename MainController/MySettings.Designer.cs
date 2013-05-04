@@ -130,5 +130,17 @@ namespace MainController {
                 this["iPadMsgArgSetting"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int userCountSetting {
+            get {
+                return ((int)(this["userCountSetting"]));
+            }
+            set {
+                this["userCountSetting"] = value;
+            }
+        }
     }
 }

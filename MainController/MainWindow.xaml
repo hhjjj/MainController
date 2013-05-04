@@ -87,7 +87,7 @@
         <Button x:Name="exerciseSceneButton" Content="Exercise Scene" HorizontalAlignment="Left" Margin="129,46,0,0" VerticalAlignment="Top" Width="115" Height="30" Grid.Column="1" Click="exerciseSceneButton_Click"/>
         <Button x:Name="limboSceneButton" Content="Limbo Scene" HorizontalAlignment="Left" Margin="300,46,0,0" VerticalAlignment="Top" Width="115" Height="30" Grid.Column="1" Click="limboSceneButton_Click"/>
         <Button Content="Limbo Set" HorizontalAlignment="Left" Margin="478,122,0,0" VerticalAlignment="Top" Width="75" Grid.ColumnSpan="2"/>
-        <Button Content="Picture" HorizontalAlignment="Left" Margin="313,81,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1"/>
+        <Button x:Name="pictureButton" Content="Picture" HorizontalAlignment="Left" Margin="313,81,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="pictureButton_Click"/>
         <Button x:Name="successButton" Content="Success" HorizontalAlignment="Left" Margin="269,108,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="successButton_Click"/>
         <Button x:Name="failButton" Content="Fail" HorizontalAlignment="Left" Margin="359,108,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="failButton_Click"/>
         <RadioButton GroupName="LimboSet" Content="3.0" HorizontalAlignment="Left" Margin="440,128,0,0" VerticalAlignment="Top" />
@@ -100,6 +100,9 @@
         <TextBox x:Name="iPadMsgArgInput" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="211,355,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="81" TextChanged="iPadMsgArgInput_TextChanged"/>
         <Label Content="string" Grid.Column="1" HorizontalAlignment="Left" Margin="151,379,0,0" VerticalAlignment="Top"/>
         <Label Content="int" Grid.Column="1" HorizontalAlignment="Left" Margin="268,383,0,0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="userCountDisplay" Grid.Column="1" HorizontalAlignment="Left" Margin="275,151,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="96"/>
+        <Label Content="User Count" Grid.Column="1" HorizontalAlignment="Left" Margin="187,146,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="resetUserCountButton" Content="reset" Grid.Column="1" HorizontalAlignment="Left" Margin="392,150,0,0" VerticalAlignment="Top" Width="75" Click="resetUserCountButton_Click"/>
 
     </Grid>
 </Window>

@@ -39,6 +39,7 @@ namespace MainController
         private static readonly string kinectBackCmd = "/kinect/2";
         private string iPadMsgAddr;
         private int iPadMsgArg;
+        private int userCount;
 
         OscMessage msg;
 
@@ -104,9 +105,13 @@ namespace MainController
             limboStandIPInput.Text = MySettings.Default.limboStandIPSetting;
             ipadIPInput.Text = MySettings.Default.iPadIPSetting;
 
+            userCount = MySettings.Default.userCountSetting;
+            userCountDisplay.Text = userCount.ToString();
 
 
             myIPAddrText.Text = LocalIPAddress();
+
+
             
 
 
@@ -414,6 +419,29 @@ namespace MainController
             iPadMsgArg = Convert.ToInt32(iPadMsgArgInput.Text);
             MySettings.Default.iPadMsgArgSetting = iPadMsgArg;
         }
+
+        private void pictureButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            userCount++;
+            msg = new OscMessage(imageServerIP, "/image/picture");
+            msg.Append(userCount);
+            msg.Send(imageServerIP);
+            msg.Send(limboViewerIP);
+
+
+            MySettings.Default.userCountSetting = userCount;
+            userCountDisplay.Text = userCount.ToString();
+        }
+
+        private void resetUserCountButton_Click(object sender, RoutedEventArgs e)
+        {
+            userCount = 0;
+            MySettings.Default.userCountSetting = 0;
+            userCountDisplay.Text = userCount.ToString();
+        }
+
+        
 
       
     }
