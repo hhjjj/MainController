@@ -39,7 +39,7 @@ namespace MainController
         private static readonly string kinectBackCmd = "/kinect/2";
         private string iPadMsgAddr;
         private int iPadMsgArg;
-        private int userCount;
+        
 
         OscMessage msg;
 
@@ -61,6 +61,39 @@ namespace MainController
 
         DispatcherTimer dispatcherTimer;
 
+
+
+
+
+        // Nike Free Limbo variables
+
+
+        private const int slideviewScene = 1;
+        private const int exerciseScene = 2;
+        private const int limboScene = 3;
+
+        private const int kinectFront = 1;
+        private const int kinectBack = 2;
+
+        private int currentScene = slideviewScene;
+
+        private int userCount;
+
+        private int standHeight = 3; // 5.0 = 3, 4.0 = 2, 3.0 = 1
+
+        private bool iPadOK = false;
+        private bool limboViewerOK = false;
+        private bool limboStandOK = false;
+        private bool imageServerOK = false;
+        private bool kinectFrontOK = false;
+        private bool kinectBackOK = false;
+        private bool remoteConOK = false;
+
+        StringComparer stringComparer = StringComparer.OrdinalIgnoreCase;
+
+
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -74,6 +107,8 @@ namespace MainController
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
             dispatcherTimer.Start();
+
+            
 
             comms_connect.Content = "Connect";
 
@@ -112,18 +147,24 @@ namespace MainController
             myIPAddrText.Text = LocalIPAddress();
 
 
-            
 
 
 
-            statusIndicator.Fill = new SolidColorBrush(Colors.Red);
+
+            iPadLED.Fill = new SolidColorBrush(Colors.Gray);
+            limboViewerLED.Fill = new SolidColorBrush(Colors.Gray);
+            limboStandLED.Fill = new SolidColorBrush(Colors.Gray);
+            imageServerLED.Fill = new SolidColorBrush(Colors.Gray);
+            kinectFrontLED.Fill = new SolidColorBrush(Colors.Gray);
+            kinectBackLED.Fill = new SolidColorBrush(Colors.Gray);
+            remoteLED.Fill = new SolidColorBrush(Colors.Gray); 
 
             //sourceEndPoint.Address = IPAddress.Parse("192.168.0.114");
             //sourceEndPoint.Port = Convert.ToInt32(12345);
 
             oscCmdServer = new OscServer(TransportType.Udp, IPAddress.Parse(LocalIPAddress()), Port);
             //oscCmdServer = new OscServer(IPAddress.Parse("224.25.26.27"), Port);
-            oscCmdServer.FilterRegisteredMethods = true;
+            oscCmdServer.FilterRegisteredMethods = false;
             //oscCmdServer.RegisterMethod(oscCmd);
             oscCmdServer.RegisterMethod(kinectFrontCmd);
             oscCmdServer.RegisterMethod(kinectBackCmd);
@@ -145,10 +186,7 @@ namespace MainController
 
             OscBundle bundle = e.Bundle;
            
-            this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
-            {
-                statusIndicator.Fill = new SolidColorBrush(Colors.Green);
-            }));
+           
             Console.WriteLine(string.Format("\nBundle Received [{0}:{1}]: Nested Bundles: {2} Nested Messages: {3}", bundle.SourceEndPoint.Address, bundle.TimeStamp, bundle.Bundles.Count, bundle.Messages.Count));
             Console.WriteLine("Total Bundles Received: {0}", sBundlesReceivedCount);
             
@@ -162,6 +200,26 @@ namespace MainController
 
             Console.WriteLine(string.Format("\nMessage Received [{0}]: {1}", message.SourceEndPoint.Address, message.Address));
             Console.WriteLine(string.Format("Message contains {0} objects.", message.Data.Count));
+
+            iPadMsgReceive(message);
+            limboViewerMsgReceive(message);
+            limboStandMsgReceive(message);
+            imageServerMsgReceive(message);
+            kinectMsgReceive(kinectFront, message);
+            kinectMsgReceive(kinectBack, message);
+
+
+
+
+            if (message.Address == "/ipad")
+            {
+                if (message.Data[0].ToString() == "ok")
+                {
+                    iPadOK = true;
+
+                }
+
+            }
 
             if (message.Address == kinectFrontCmd)
             {
@@ -221,6 +279,7 @@ namespace MainController
                         msg.Send(kinectFrontIP);
                     }));
                 }
+                
             }
             for (int i = 0; i < message.Data.Count; i++)
             {
@@ -258,12 +317,6 @@ namespace MainController
 
         }
 
-        private void TestButton_Click(object sender, RoutedEventArgs e)
-        {
-            msg = new OscMessage(kinectFrontIP, kinectFrontCmd);
-            msg.Append("Stop");
-            msg.Send(kinectFrontIP);
-        }
 
         private void IPSetButton_Click(object sender, RoutedEventArgs e)
         {
@@ -321,7 +374,9 @@ namespace MainController
         private void serialRxHandler(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
             // Collecting the characters received to our 'buffer' (string).
-            serialRxData = serial.ReadExisting();
+            //serialRxData = serial.ReadExisting();
+            serialRxData = serial.ReadLine();
+            remtoteMsgReceive(serialRxData);
             Dispatcher.Invoke(DispatcherPriority.Send, new UpdateUiTextDelegate(showRxData), serialRxData);
         }
         private void showRxData(string text)
@@ -395,11 +450,50 @@ namespace MainController
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            Console.WriteLine("sec");
+            Console.WriteLine("Comm Test All");
+            if (iPadOK == true)
+            {
+                iPadLED.Fill = new SolidColorBrush(Colors.Green);
+            }
+            else
+            {
+                iPadLED.Fill = new SolidColorBrush(Colors.Red);
+            }
 
+            if (remoteConOK)
+            {
+                remoteLED.Fill = new SolidColorBrush(Colors.Green);
+            }
+            else {
+                remoteLED.Fill = new SolidColorBrush(Colors.Red);
+            }
+
+
+            if (standHeight == 3)
+            {
+                radioButton5.IsChecked = true;
+            }
+            else if (standHeight == 2)
+            {
+                radioButton4.IsChecked = true;
+            }
+            else if (standHeight == 1)
+            {
+                radioButton3.IsChecked = true;
+            }
+            TestAllButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            iPadOK = false;
+            limboViewerOK = false;
+            limboStandOK = false;
+            imageServerOK = false;
+            kinectFrontOK = false;
+            kinectBackOK = false;
+            remoteConOK = false;
             // Forcing the CommandManager to raise the RequerySuggested event
             CommandManager.InvalidateRequerySuggested();
         }
+
+      
 
         private void iPadTestButton_Click(object sender, RoutedEventArgs e)
         {
@@ -423,15 +517,19 @@ namespace MainController
         private void pictureButton_Click(object sender, RoutedEventArgs e)
         {
 
-            userCount++;
+           
             msg = new OscMessage(imageServerIP, "/image/picture");
             msg.Append(userCount);
             msg.Send(imageServerIP);
-            msg.Send(limboViewerIP);
+
+            msg = new OscMessage(ipadIP, "/ipad/picture");
+            msg.Append(userCount);
+            msg.Send(ipadIP);
+            userCount++;
 
 
-            MySettings.Default.userCountSetting = userCount;
-            userCountDisplay.Text = userCount.ToString();
+            MySettings.Default.userCountSetting = userCount-1;
+            userCountDisplay.Text = (userCount-1).ToString();
         }
 
         private void resetUserCountButton_Click(object sender, RoutedEventArgs e)
@@ -441,8 +539,403 @@ namespace MainController
             userCountDisplay.Text = userCount.ToString();
         }
 
-        
+        private void ipadReadyButton_Click(object sender, RoutedEventArgs e)
+        {
+            iPadNextUserReady();
+        }
 
-      
+        private void iPadMsgButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ipadTestButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            iPadIsAlive();
+           
+        }
+
+
+
+        // iPad Message Send
+        private void iPadSendPicture(int _userCount)
+        {
+            OscMessage msg = new OscMessage(ipadIP, "/ipad/picture");
+            msg.Append(_userCount);
+            msg.Send(ipadIP);
+        }
+
+        private void iPadNextUserReady()
+        {
+            OscMessage msg = new OscMessage(ipadIP, "/ipad");
+            msg.Append("ready");
+            msg.Send(ipadIP);
+        }
+
+        private void iPadIsAlive()
+        {
+            OscMessage msg = new OscMessage(ipadIP, "/ipad");
+            msg.Append("test");
+            msg.Send(ipadIP);
+        }
+
+        // iPad Message Receive
+
+        private void iPadMsgReceive(OscMessage message)
+        {
+            if (message.Address == "/ipad")
+            {
+                if(message.Data[0].GetType() == typeof(int))
+                {
+                    if (Convert.ToInt32(message.Data[0]) == 1 || Convert.ToInt32(message.Data[0]) == 2 || Convert.ToInt32(message.Data[0]) == 3)
+                    {
+                        standHeight = Convert.ToInt32(message.Data[0]);
+                        limboStandSetStandHeight(standHeight);
+                    }
+                }
+                if (message.Data[0].ToString() == "exercise")
+                {
+                    currentScene = exerciseScene;
+                    limboViewerSetScene(currentScene);
+                    kinectOn(kinectFront);
+                    kinectOn(kinectBack);  
+                }
+                if (message.Data[0].ToString() == "ok")
+                {
+                    iPadOK = true;
+                }
+
+            }
+
+        }
+
+        // Limbo Stand Message Send
+        private void limboStandSetStandHeight(int _standHeight)
+        {
+            OscMessage msg = new OscMessage(limboStandIP, "/stand");
+            msg.Append(standHeight);
+            msg.Send(limboStandIP);
+        }
+
+        private void limboStandIsAlive()
+        {
+            OscMessage msg = new OscMessage(limboStandIP, "/stand");
+            msg.Append("test");
+            msg.Send(limboStandIP);
+        }
+
+        // Limbo Stand Message Receive
+        private void limboStandMsgReceive(OscMessage message)
+        {
+            if (message.Address == "/stand")
+            {
+               
+                if (message.Data[0].ToString() == "shoot")
+                {
+                    userCount++;
+
+                    imageServerTakePhoto(userCount);
+                    limboViewerCaptureFree(userCount);
+
+                    MySettings.Default.userCountSetting = userCount;
+                    userCountDisplay.Text = userCount.ToString();
+
+                }
+                if (message.Data[0].ToString() == "ok")
+                {
+                    limboStandOK = true;
+                }
+
+            }
+        }
+
+
+        // Limbo Viewer Message Send
+        private void limboViewerSetScene(int sceneNumber)
+        {
+            OscMessage msg = new OscMessage(limboViewerIP, "/view/scene");
+            msg.Append(sceneNumber);
+            msg.Send(limboViewerIP);
+        }
+
+        private void limboViewerCaptureFree(int _userCount)
+        {
+            OscMessage msg = new OscMessage(limboViewerIP, "/view/picture");
+            msg.Append(_userCount);
+            msg.Send(limboViewerIP);
+        }
+
+        private void limboViewerSendSuccess(bool successStatus)
+        {
+            OscMessage msg = new OscMessage(limboViewerIP, "/view");
+            if (successStatus)
+            {
+                msg.Append("success");
+            }
+            else 
+            {
+                msg.Append("fail");
+            }
+
+            msg.Send(limboViewerIP);
+        }
+
+        private void limboViewerGetImageFromServer(int _userCount)
+        {
+            OscMessage msg = new OscMessage(limboViewerIP, "/view/merge");
+            msg.Append(_userCount);
+            msg.Send(limboViewerIP);
+        }
+
+        private void limboViewerIsAlive()
+        {
+            OscMessage msg = new OscMessage(limboViewerIP, "/view");
+            msg.Append("test");
+            msg.Send(limboViewerIP);
+        }
+
+        // Limbo Viewer Message Receive
+        private void limboViewerMsgReceive(OscMessage message)
+        {
+            if (message.Address == "/view")
+            {
+                if (message.Data[0].ToString() == "sync")
+                {
+                    currentScene = limboScene;
+                    limboViewerSetScene(currentScene);
+                    kinectOn(kinectFront);
+                    kinectOn(kinectBack);
+                }
+
+                if (message.Data[0].ToString() == "ok")
+                {
+                    limboViewerOK = true;
+                }
+                
+            }
+
+            if (message.Address == "/view/image")
+            {
+                if (message.Data[0].ToString() == "uploaded")
+                {
+                    imageServerMergeImage();
+                }
+            }
+        }
+        
+        // Image Server Message Send
+        private void imageServerMergeImage()
+        {
+            OscMessage msg = new OscMessage(imageServerIP, "/image");
+            msg.Append("merge");
+            msg.Send(imageServerIP);
+        }
+
+        private void imageServerTakePhoto(int _userCount)
+        {
+            OscMessage msg = new OscMessage(imageServerIP, "/image/picture");
+            msg.Append(_userCount);
+            msg.Send(imageServerIP);
+        }
+
+        private void imageServerIsAlive()
+        {
+            OscMessage msg = new OscMessage(imageServerIP, "/image");
+            msg.Append("test");
+            msg.Send(imageServerIP);
+        }
+
+        // Image Server Message Receive
+
+        private void imageServerMsgReceive(OscMessage message)
+        {
+            if (message.Address == "/image")
+            {
+                if (message.Data[0].ToString() == "ok")
+                {
+                    imageServerOK = true;
+                }
+
+            }
+
+            if (message.Address == "/image/merge")
+            {
+                if (message.Data[0].ToString() == "done")
+                {
+                    iPadSendPicture(userCount);
+                    limboViewerGetImageFromServer(userCount);
+                }
+            }
+        }
+
+
+        // Kinect Message Send
+        private void kinectOn(int kinect)
+        {
+            string addr = "/kinect/" + kinect.ToString();
+
+            if(kinect == 1)
+            {
+                OscMessage msg = new OscMessage(kinectFrontIP, addr); ;
+                msg.Append("on");
+                msg.Send(kinectFrontIP);
+            }
+            else if (kinect == 2)
+            {
+                OscMessage msg = new OscMessage(kinectBackIP, addr); ;
+                msg.Append("on");
+                msg.Send(kinectBackIP);
+            }
+            else 
+            {
+                return;
+            }
+        }
+
+        private void kinectOff(int kinect)
+        {
+            string addr = "/kinect/" + kinect.ToString();
+
+            if (kinect == 1)
+            {
+                OscMessage msg = new OscMessage(kinectFrontIP, addr); ;
+                msg.Append("off");
+                msg.Send(kinectFrontIP);
+            }
+            else if (kinect == 2)
+            {
+                OscMessage msg = new OscMessage(kinectBackIP, addr); ;
+                msg.Append("off");
+                msg.Send(kinectBackIP);
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        private void kinectIsAlive(int kinect)
+        {
+            string addr = "/kinect/" + kinect.ToString();
+
+            if (kinect == 1)
+            {
+                OscMessage msg = new OscMessage(kinectFrontIP, addr); ;
+                msg.Append("test");
+                msg.Send(kinectFrontIP);
+            }
+            else if (kinect == 2)
+            {
+                OscMessage msg = new OscMessage(kinectBackIP, addr); ;
+                msg.Append("test");
+                msg.Send(kinectBackIP);
+            }
+            else
+            {
+                return;
+            }
+        }
+        
+        // Kinect Message Receive
+
+        private void kinectMsgReceive(int kinect, OscMessage message)
+        {
+            string addr = "/kinect/" + kinect.ToString();
+
+            if (message.Address == addr)
+            {
+                if (message.Data[0].ToString() == "ok")
+                {
+                    if (kinect == 1)
+                    {
+                        kinectFrontOK = true;
+                    }
+                    else if (kinect == 2)
+                    {
+                        kinectBackOK = true;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+
+            }
+
+        }
+
+        // Remote Controller Message Send
+        private void remoteIsAlive()
+        {
+            if (serial.IsOpen)
+            { 
+                char[] buf = {'t'};
+                serial.Write(buf, 0, 1);
+            }
+        }
+
+        // Remote Controller Message Receive
+        private void remtoteMsgReceive(string message)
+        {
+            if (stringComparer.Equals("ok\r", message))
+            {
+                remoteConOK = true;
+            }
+            if (stringComparer.Equals("1\r", message))
+            {
+                Console.WriteLine("Success");
+                
+                OscMessage msg = new OscMessage(ipadIP, "/ipad");
+                msg.Append("success");
+                msg.Send(ipadIP);
+
+
+                msg = new OscMessage(limboViewerIP, "/view");
+                msg.Append("success");
+                msg.Send(limboViewerIP);
+                
+
+            }
+
+            if (stringComparer.Equals("2\r", message))
+            {
+                Console.WriteLine("Special Cmd");
+            }
+
+            if (stringComparer.Equals("3\r", message))
+            {
+                Console.WriteLine("Fail");
+                OscMessage msg = new OscMessage(ipadIP, "/ipad");
+                msg.Append("fail");
+                msg.Send(ipadIP);
+
+
+                msg = new OscMessage(limboViewerIP, "/view");
+                msg.Append("fail");
+                msg.Send(limboViewerIP);
+            }
+
+        }
+
+        private void TestAllButton_Click(object sender, RoutedEventArgs e)
+        {
+       
+            iPadIsAlive();
+            limboViewerIsAlive();
+            limboStandIsAlive();
+            imageServerIsAlive();
+            kinectIsAlive(kinectFront);
+            kinectIsAlive(kinectBack);
+            remoteIsAlive();
+        }
+
+
+        private void UIUpdateAsync()
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+            {
+                frontStatus.Fill = new SolidColorBrush(Colors.Red);
+            }));
+        }
     }
 }
