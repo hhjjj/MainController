@@ -232,7 +232,7 @@ namespace MainController
 
 
 
-
+            /*
             if (message.Address == "/ipad")
             {
                 if (message.Data[0].ToString() == "ok")
@@ -302,7 +302,7 @@ namespace MainController
                     }));
                 }
                 
-            }
+            }*/
             for (int i = 0; i < message.Data.Count; i++)
             {
                 string dataString;
@@ -404,9 +404,11 @@ namespace MainController
         private void showRxData(string text)
         {
             // Assign the value of the recieved_data to the RichTextBox.
-            para.Inlines.Add(text);
-            mcFlowDoc.Blocks.Add(para);
-            commData.Document = mcFlowDoc;
+            //para.Inlines.Add(text);
+            //mcFlowDoc.Blocks.Add(para);
+            //commData.Document = mcFlowDoc;
+
+            CommsData.Text ="Message: "+ text + "at: "+ DateTime.Now.ToLongTimeString();
         }
 
         private string LocalIPAddress()
@@ -885,6 +887,54 @@ namespace MainController
                     }
                 }
 
+                if (message.Data[0].ToString() == "in")
+                {
+                    if (kinect == 1)
+                    {
+                        kinectFrontOK = true;
+                        this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+                        {
+                            frontStatus.Fill = new SolidColorBrush(Colors.Red);
+                        }));
+                    }
+                    else if (kinect == 2)
+                    {
+                        kinectBackOK = true;
+                        this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+                        {
+                            backStatus.Fill = new SolidColorBrush(Colors.Red);
+                        }));
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+
+                if (message.Data[0].ToString() == "out")
+                {
+                    if (kinect == 1)
+                    {
+                        kinectFrontOK = true;
+                        this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+                        {
+                            frontStatus.Fill = new SolidColorBrush(Colors.Blue);
+                        }));
+                    }
+                    else if (kinect == 2)
+                    {
+                        kinectBackOK = true;
+                        this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+                        {
+                            backStatus.Fill = new SolidColorBrush(Colors.Blue);
+                        }));
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+
             }
 
         }
@@ -988,6 +1038,7 @@ namespace MainController
             limboViewerSetScene(currentScene);
             kinectOff(kinectFront);
             kinectOff(kinectBack);
+            limboStandReset();
             SceneDisplayBox.Text = SceneToText(currentScene);
             
 
