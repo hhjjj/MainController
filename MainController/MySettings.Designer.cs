@@ -109,30 +109,6 @@ namespace MainController {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("/ipad")]
-        public string iPadMsgAddrSetting {
-            get {
-                return ((string)(this["iPadMsgAddrSetting"]));
-            }
-            set {
-                this["iPadMsgAddrSetting"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int iPadMsgArgSetting {
-            get {
-                return ((int)(this["iPadMsgArgSetting"]));
-            }
-            set {
-                this["iPadMsgArgSetting"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int userCountSetting {
             get {

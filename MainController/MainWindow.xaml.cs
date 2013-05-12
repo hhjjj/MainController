@@ -84,10 +84,13 @@ namespace MainController
         private bool iPadOK = false;
         private bool limboViewerOK = false;
         private bool limboStandOK = false;
+        private bool limboStandSettingOK = false;
         private bool imageServerOK = false;
         private bool kinectFrontOK = false;
         private bool kinectBackOK = false;
         private bool remoteConOK = false;
+
+        private bool photoTaken = false;
 
         StringComparer stringComparer = StringComparer.OrdinalIgnoreCase;
 
@@ -101,6 +104,25 @@ namespace MainController
             
         }
 
+        private string SceneToText(int sceneNum)
+        {
+            string scene =" ";
+            if (sceneNum == slideviewScene)
+            {
+                scene = "Slide View";
+            }
+            else if (sceneNum == exerciseScene)
+            {
+                scene = "Exercise";
+            }
+            else if (sceneNum == limboScene)
+            {
+                scene = "Limbo";
+            }
+
+            return scene;
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
@@ -108,7 +130,9 @@ namespace MainController
             dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
             dispatcherTimer.Start();
 
-            
+
+            SceneDisplayBox.TextAlignment = TextAlignment.Center;
+            SceneDisplayBox.Text = SceneToText(currentScene);
 
             comms_connect.Content = "Connect";
 
@@ -126,11 +150,9 @@ namespace MainController
             ipadIP.Address = IPAddress.Parse(MySettings.Default.iPadIPSetting);
             ipadIP.Port = Port;
 
-            iPadMsgAddr = MySettings.Default.iPadMsgAddrSetting;
-            iPadMsgArg = MySettings.Default.iPadMsgArgSetting;
 
-            iPadMsgAddrInput.Text = iPadMsgAddr;
-            iPadMsgArgInput.Text = iPadMsgArg.ToString();
+
+
 
             portInput.Text = Port.ToString();
             kinectFrontIPInput.Text = MySettings.Default.kinectFrontIPSetting;
@@ -162,7 +184,7 @@ namespace MainController
             //sourceEndPoint.Address = IPAddress.Parse("192.168.0.114");
             //sourceEndPoint.Port = Convert.ToInt32(12345);
 
-            oscCmdServer = new OscServer(TransportType.Udp, IPAddress.Parse(LocalIPAddress()), Port);
+            oscCmdServer = new OscServer(TransportType.Udp, IPAddress.Parse(LocalIPAddress()), 10000);
             //oscCmdServer = new OscServer(IPAddress.Parse("224.25.26.27"), Port);
             oscCmdServer.FilterRegisteredMethods = false;
             //oscCmdServer.RegisterMethod(oscCmd);
@@ -414,73 +436,39 @@ namespace MainController
 
         private void slideSceneButton_Click(object sender, RoutedEventArgs e)
         {
-            msg = new OscMessage(limboViewerIP, "/scene");
-            msg.Append((Int32)1);
-            msg.Send(limboViewerIP);
+            goToSlideviewScene();
             
         }
 
         private void exerciseSceneButton_Click(object sender, RoutedEventArgs e)
         {
-            msg = new OscMessage(limboViewerIP, "/scene");
-            msg.Append((Int32)2);
-            msg.Send(limboViewerIP);
+            goToExerciseScene();
         }
 
         private void limboSceneButton_Click(object sender, RoutedEventArgs e)
         {
-            msg = new OscMessage(limboViewerIP, "/scene");
-            msg.Append((Int32)3);
-            msg.Send(limboViewerIP);
+            goToLimboScene();
         }
 
         private void successButton_Click(object sender, RoutedEventArgs e)
-        {   
-            typeof(Button).GetMethod("set_IsPressed", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(failButton, new object[] { true });
-            typeof(Button).GetMethod("set_IsPressed", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(failButton, new object[] { false });
-            failButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        {
+            sendSuccess(true);
+            //typeof(Button).GetMethod("set_IsPressed", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(failButton, new object[] { true });
+            //typeof(Button).GetMethod("set_IsPressed", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(failButton, new object[] { false });
+            //failButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             
         }
 
         private void failButton_Click(object sender, RoutedEventArgs e)
         {
-            
 
+            sendSuccess(false);
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             Console.WriteLine("Comm Test All");
-            if (iPadOK == true)
-            {
-                iPadLED.Fill = new SolidColorBrush(Colors.Green);
-            }
-            else
-            {
-                iPadLED.Fill = new SolidColorBrush(Colors.Red);
-            }
-
-            if (remoteConOK)
-            {
-                remoteLED.Fill = new SolidColorBrush(Colors.Green);
-            }
-            else {
-                remoteLED.Fill = new SolidColorBrush(Colors.Red);
-            }
-
-
-            if (standHeight == 3)
-            {
-                radioButton5.IsChecked = true;
-            }
-            else if (standHeight == 2)
-            {
-                radioButton4.IsChecked = true;
-            }
-            else if (standHeight == 1)
-            {
-                radioButton3.IsChecked = true;
-            }
+            reportStatus();
             TestAllButton.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             iPadOK = false;
             limboViewerOK = false;
@@ -502,39 +490,20 @@ namespace MainController
             msg.Send(ipadIP);
         }
 
-        private void iPadMsgAddrInput_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            iPadMsgAddr = iPadMsgAddrInput.Text;
-            MySettings.Default.iPadMsgAddrSetting = iPadMsgAddr;
-        }
 
-        private void iPadMsgArgInput_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            iPadMsgArg = Convert.ToInt32(iPadMsgArgInput.Text);
-            MySettings.Default.iPadMsgArgSetting = iPadMsgArg;
-        }
+
+       
 
         private void pictureButton_Click(object sender, RoutedEventArgs e)
         {
-
+            takePicture();
            
-            msg = new OscMessage(imageServerIP, "/image/picture");
-            msg.Append(userCount);
-            msg.Send(imageServerIP);
-
-            msg = new OscMessage(ipadIP, "/ipad/picture");
-            msg.Append(userCount);
-            msg.Send(ipadIP);
-            userCount++;
-
-
-            MySettings.Default.userCountSetting = userCount-1;
-            userCountDisplay.Text = (userCount-1).ToString();
         }
 
         private void resetUserCountButton_Click(object sender, RoutedEventArgs e)
         {
             userCount = 0;
+            photoTaken = false;
             MySettings.Default.userCountSetting = 0;
             userCountDisplay.Text = userCount.ToString();
         }
@@ -572,6 +541,21 @@ namespace MainController
             msg.Send(ipadIP);
         }
 
+        private void iPadSendSuccess(bool successStatus)
+        {
+            OscMessage msg = new OscMessage(limboViewerIP, "/ipad");
+            if (successStatus)
+            {
+                msg.Append("success");
+            }
+            else 
+            {
+                msg.Append("fail");
+            }
+
+            msg.Send(ipadIP);
+        }
+
         private void iPadIsAlive()
         {
             OscMessage msg = new OscMessage(ipadIP, "/ipad");
@@ -590,15 +574,34 @@ namespace MainController
                     if (Convert.ToInt32(message.Data[0]) == 1 || Convert.ToInt32(message.Data[0]) == 2 || Convert.ToInt32(message.Data[0]) == 3)
                     {
                         standHeight = Convert.ToInt32(message.Data[0]);
+
                         limboStandSetStandHeight(standHeight);
+
+                        this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+                        {
+                            if (standHeight == 3)
+                            {
+                                radioButton5.IsChecked = true;
+
+                            }
+                            else if (standHeight == 2)
+                            {
+                                radioButton4.IsChecked = true;
+
+                            }
+                            else if (standHeight == 1)
+                            {
+                                radioButton3.IsChecked = true;
+
+                            }
+                        }));
+                        
                     }
                 }
                 if (message.Data[0].ToString() == "exercise")
                 {
-                    currentScene = exerciseScene;
-                    limboViewerSetScene(currentScene);
-                    kinectOn(kinectFront);
-                    kinectOn(kinectBack);  
+                    goToExerciseScene();
+
                 }
                 if (message.Data[0].ToString() == "ok")
                 {
@@ -613,7 +616,14 @@ namespace MainController
         private void limboStandSetStandHeight(int _standHeight)
         {
             OscMessage msg = new OscMessage(limboStandIP, "/stand");
-            msg.Append(standHeight);
+            msg.Append(_standHeight);
+            msg.Send(limboStandIP);
+        }
+
+        private void limboStandReset()
+        {
+            OscMessage msg = new OscMessage(limboStandIP, "/stand");
+            msg.Append("reset");
             msg.Send(limboStandIP);
         }
 
@@ -632,19 +642,30 @@ namespace MainController
                
                 if (message.Data[0].ToString() == "shoot")
                 {
-                    userCount++;
+                    takePicture();
+                    //userCount++;
 
-                    imageServerTakePhoto(userCount);
-                    limboViewerCaptureFree(userCount);
+                    //imageServerTakePhoto(userCount);
+                    //limboViewerCaptureFree(userCount);
 
-                    MySettings.Default.userCountSetting = userCount;
-                    userCountDisplay.Text = userCount.ToString();
+                    //MySettings.Default.userCountSetting = userCount;
+                    //this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+                    //{
+                    //    userCountDisplay.Text = userCount.ToString();
+                    //}));
+                   
 
                 }
+                else
                 if (message.Data[0].ToString() == "ok")
                 {
                     limboStandOK = true;
                 }
+                if (message.Data[0].ToString() == "set")
+                {
+                    limboStandSettingOK = true;
+                }
+                 
 
             }
         }
@@ -701,10 +722,8 @@ namespace MainController
             {
                 if (message.Data[0].ToString() == "sync")
                 {
-                    currentScene = limboScene;
-                    limboViewerSetScene(currentScene);
-                    kinectOn(kinectFront);
-                    kinectOn(kinectBack);
+                    goToLimboScene();
+                    
                 }
 
                 if (message.Data[0].ToString() == "ok")
@@ -764,6 +783,12 @@ namespace MainController
                 {
                     iPadSendPicture(userCount);
                     limboViewerGetImageFromServer(userCount);
+                    userCount++;
+                    MySettings.Default.userCountSetting = userCount;
+                    this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+                    {
+                        userCountDisplay.Text = userCount.ToString();
+                    }));
                 }
             }
         }
@@ -884,15 +909,10 @@ namespace MainController
             if (stringComparer.Equals("1\r", message))
             {
                 Console.WriteLine("Success");
+
+                sendSuccess(true);
                 
-                OscMessage msg = new OscMessage(ipadIP, "/ipad");
-                msg.Append("success");
-                msg.Send(ipadIP);
-
-
-                msg = new OscMessage(limboViewerIP, "/view");
-                msg.Append("success");
-                msg.Send(limboViewerIP);
+                
                 
 
             }
@@ -905,14 +925,7 @@ namespace MainController
             if (stringComparer.Equals("3\r", message))
             {
                 Console.WriteLine("Fail");
-                OscMessage msg = new OscMessage(ipadIP, "/ipad");
-                msg.Append("fail");
-                msg.Send(ipadIP);
-
-
-                msg = new OscMessage(limboViewerIP, "/view");
-                msg.Append("fail");
-                msg.Send(limboViewerIP);
+                sendSuccess(false);
             }
 
         }
@@ -937,5 +950,172 @@ namespace MainController
                 frontStatus.Fill = new SolidColorBrush(Colors.Red);
             }));
         }
+
+
+
+
+        // simulation
+
+        private void takePicture()
+        {
+
+            if (photoTaken == false)
+            {
+                photoTaken = true;
+                imageServerTakePhoto(userCount);
+                limboViewerCaptureFree(userCount);
+                
+
+               
+            }
+        }
+
+        private void goToLimboScene()
+        {
+            currentScene = limboScene;
+            limboViewerSetScene(currentScene);
+            kinectOn(kinectFront);
+            kinectOn(kinectBack);
+            limboStandReset();
+            SceneDisplayBox.Text = SceneToText(currentScene);
+
+        }
+
+
+        private void goToSlideviewScene()
+        {
+            currentScene = slideviewScene;
+            limboViewerSetScene(currentScene);
+            kinectOff(kinectFront);
+            kinectOff(kinectBack);
+            SceneDisplayBox.Text = SceneToText(currentScene);
+            
+
+        }
+
+        private void goToExerciseScene()
+        {
+            currentScene = exerciseScene;
+            limboViewerSetScene(currentScene);
+            kinectOn(kinectFront);
+            kinectOn(kinectBack);
+            SceneDisplayBox.Text = SceneToText(currentScene);
+
+        }
+
+        private void sendSuccess(bool successStatus)
+        {
+            photoTaken = false;
+            iPadSendSuccess(successStatus);
+            limboViewerSendSuccess(successStatus);
+        }
+
+        
+
+
+
+        // check and UI update
+
+        private void reportStatus()
+        {
+            if (iPadOK == true)
+            {
+                iPadLED.Fill = new SolidColorBrush(Colors.Green);
+            }
+            else
+            {
+                iPadLED.Fill = new SolidColorBrush(Colors.Red);
+            }
+
+            if (remoteConOK)
+            {
+                remoteLED.Fill = new SolidColorBrush(Colors.Green);
+            }
+            else
+            {
+                remoteLED.Fill = new SolidColorBrush(Colors.Red);
+            }
+
+            if (imageServerOK)
+            {
+                imageServerLED.Fill = new SolidColorBrush(Colors.Green);
+            }
+            else 
+            {
+                imageServerLED.Fill = new SolidColorBrush(Colors.Red);
+            }
+
+            if (limboStandOK)
+            {
+                limboStandLED.Fill = new SolidColorBrush(Colors.Green);
+            }
+            else 
+            {
+                limboStandLED.Fill = new SolidColorBrush(Colors.Red);
+            }
+
+            if (limboViewerOK)
+            {
+                limboViewerLED.Fill = new SolidColorBrush(Colors.Green);
+            }
+            else
+            {
+                limboViewerLED.Fill = new SolidColorBrush(Colors.Red);
+            }
+
+            if (kinectFrontOK)
+            {
+                kinectFrontLED.Fill = new SolidColorBrush(Colors.Green);
+            }
+            else
+            {
+                kinectFrontLED.Fill = new SolidColorBrush(Colors.Red);
+            }
+
+            if (kinectBackOK)
+            {
+                kinectBackLED.Fill = new SolidColorBrush(Colors.Green);
+            }
+            else
+            {
+                kinectBackLED.Fill = new SolidColorBrush(Colors.Red);
+            }
+
+         
+        }
+
+        private void limboSetButton_Click(object sender, RoutedEventArgs e)
+        {
+
+
+            int temp = 0;
+
+            if (radioButton2.IsChecked == true)
+            {
+                temp = 0;
+            }
+            else if (radioButton3.IsChecked == true)
+            {
+                temp = 1;
+            }
+            else if (radioButton4.IsChecked == true)
+            {
+                temp = 2;
+            }
+            else if (radioButton5.IsChecked == true)
+            {
+                temp = 3;
+            }
+
+
+            limboStandSetStandHeight(temp);
+        }
+
+        private void limboResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            limboStandReset();
+        }
+
+      
     }
 }
