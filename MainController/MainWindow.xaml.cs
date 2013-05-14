@@ -1014,9 +1014,6 @@ namespace MainController
                 photoTaken = true;
                 imageServerTakePhoto(userCount);
                 limboViewerCaptureFree(userCount);
-                
-
-               
             }
         }
 
@@ -1166,6 +1163,13 @@ namespace MainController
         {
             limboStandReset();
         }
+
+        private void mergeButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+       
 
       
     }

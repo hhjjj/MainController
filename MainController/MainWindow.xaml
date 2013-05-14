@@ -78,24 +78,24 @@
         <TextBox x:Name="portInput" HorizontalAlignment="Left" Height="23" Margin="133,255,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
         <Label Content="OSC Port" HorizontalAlignment="Left" Margin="56,252,0,0" VerticalAlignment="Top" Width="64" Height="26"/>
         <Button x:Name="comms_connect" Content="Connect" HorizontalAlignment="Left" Margin="263,449,0,0" VerticalAlignment="Top" Width="75" Click="comms_connect_Click"/>
-        <Rectangle x:Name="frontStatus" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="100" Margin="480,225,0,0" VerticalAlignment="Top" Width="214" Grid.ColumnSpan="2"/>
-        <Rectangle x:Name="backStatus" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="100" Margin="241,225,0,0" VerticalAlignment="Top" Width="215" Grid.Column="1"/>
-        <Button x:Name="slideSceneButton" Grid.ColumnSpan="2" Content="Slide Scene" HorizontalAlignment="Left" Margin="455,75,0,0" VerticalAlignment="Top" Width="115" Height="30" Click="slideSceneButton_Click"/>
-        <Button x:Name="exerciseSceneButton" Content="Exercise Scene" HorizontalAlignment="Left" Margin="180,75,0,0" VerticalAlignment="Top" Width="115" Height="30" Grid.Column="1" Click="exerciseSceneButton_Click"/>
+        <Rectangle x:Name="frontStatus" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="100" Margin="17,369,0,0" VerticalAlignment="Top" Width="214" Grid.Column="1"/>
+        <Rectangle x:Name="backStatus" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="100" Margin="273,369,0,0" VerticalAlignment="Top" Width="215" Grid.Column="1"/>
+        <Button x:Name="slideSceneButton" Content="Slide Scene" HorizontalAlignment="Left" Margin="41,75,0,0" VerticalAlignment="Top" Width="115" Height="30" Click="slideSceneButton_Click" Grid.Column="1"/>
+        <Button x:Name="exerciseSceneButton" Content="Exercise Scene" HorizontalAlignment="Left" Margin="207,75,0,0" VerticalAlignment="Top" Width="115" Height="30" Grid.Column="1" Click="exerciseSceneButton_Click"/>
         <Button x:Name="limboSceneButton" Content="Limbo Scene" HorizontalAlignment="Left" Margin="374,75,0,0" VerticalAlignment="Top" Width="115" Height="30" Grid.Column="1" Click="limboSceneButton_Click"/>
-        <Button x:Name="limboSetButton" Content="Limbo Set" HorizontalAlignment="Left" Margin="0,137,0,0" VerticalAlignment="Top" Width="75" Click="limboSetButton_Click" Grid.Column="1"/>
-        <Button x:Name="pictureButton" Content="Picture" HorizontalAlignment="Left" Margin="414,110,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="pictureButton_Click"/>
-        <Button x:Name="successButton" Content="Success" HorizontalAlignment="Left" Margin="329,137,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="successButton_Click"/>
-        <Button x:Name="failButton" Content="Fail" HorizontalAlignment="Left" Margin="414,137,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="failButton_Click"/>
-        <RadioButton x:Name="radioButton3" GroupName="LimboSet" Content="3.0" HorizontalAlignment="Left" Margin="5,116,0,0" VerticalAlignment="Top" Grid.Column="1" />
-        <RadioButton x:Name="radioButton4" GroupName="LimboSet" Content="4.0" HorizontalAlignment="Left" Margin="457,116,0,0" VerticalAlignment="Top"/>
-        <RadioButton x:Name="radioButton5" GroupName="LimboSet" Content="5.0" HorizontalAlignment="Left" Margin="417,116,0,0" VerticalAlignment="Top" IsChecked="true" />
-        <RadioButton x:Name="radioButton2" GroupName="LimboSet" Content="X" HorizontalAlignment="Left" Margin="45,116,0,0" VerticalAlignment="Top" Grid.Column="1" Width="30" />
+        <Button x:Name="limboSetButton" Content="Limbo Set" HorizontalAlignment="Left" Margin="79,138,0,0" VerticalAlignment="Top" Width="75" Click="limboSetButton_Click" Grid.Column="1"/>
+        <Button x:Name="pictureButton" Content="Picture" HorizontalAlignment="Left" Margin="330,138,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="pictureButton_Click"/>
+        <Button x:Name="successButton" Content="Success" HorizontalAlignment="Left" Margin="330,179,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="successButton_Click"/>
+        <Button x:Name="failButton" Content="Fail" HorizontalAlignment="Left" Margin="415,179,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="failButton_Click"/>
+        <RadioButton x:Name="radioButton3" GroupName="LimboSet" Content="3.0" HorizontalAlignment="Left" Margin="84,117,0,0" VerticalAlignment="Top" Grid.Column="1" />
+        <RadioButton x:Name="radioButton4" GroupName="LimboSet" Content="4.0" HorizontalAlignment="Left" Margin="41,117,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <RadioButton x:Name="radioButton5" GroupName="LimboSet" Content="5.0" HorizontalAlignment="Left" Margin="1,117,0,0" VerticalAlignment="Top" IsChecked="true" Grid.Column="1" />
+        <RadioButton x:Name="radioButton2" GroupName="LimboSet" Content="X" HorizontalAlignment="Left" Margin="124,117,0,0" VerticalAlignment="Top" Grid.Column="1" Width="30" />
         <TextBlock x:Name="myIPAddrText" Grid.Column="1" HorizontalAlignment="Left" Margin="241,700,0,0" TextWrapping="Wrap" Text="IP Address" VerticalAlignment="Top" Width="98"/>
         <Label Content="My IP Addr" Grid.Column="1" HorizontalAlignment="Left" Margin="160,695,0,0" VerticalAlignment="Top" Width="81"/>
-        <TextBlock x:Name="userCountDisplay" Grid.Column="1" HorizontalAlignment="Left" Margin="304,184,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="96"/>
-        <Label Content="User Count" Grid.Column="1" HorizontalAlignment="Left" Margin="216,179,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="resetUserCountButton" Content="reset" Grid.Column="1" HorizontalAlignment="Left" Margin="414,179,0,0" VerticalAlignment="Top" Width="75" Click="resetUserCountButton_Click"/>
+        <TextBlock x:Name="userCountDisplay" Grid.Column="1" HorizontalAlignment="Left" Margin="305,260,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="96"/>
+        <Label Content="User Count" Grid.Column="1" HorizontalAlignment="Left" Margin="217,255,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="resetUserCountButton" Content="reset" Grid.Column="1" HorizontalAlignment="Left" Margin="415,255,0,0" VerticalAlignment="Top" Width="75" Click="resetUserCountButton_Click"/>
         <Label Content="iPad" Grid.Column="1" HorizontalAlignment="Left" Margin="23,605,0,0" VerticalAlignment="Top"/>
         <Ellipse x:Name="limboViewerLED" HorizontalAlignment="Left" Height="26" Margin="79,636,0,0" VerticalAlignment="Top" Width="26" Grid.Column="1">
             <Ellipse.Fill>
@@ -117,7 +117,7 @@
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}"/>
             </Ellipse.Fill>
         </Ellipse>
-        <Ellipse x:Name="kinectBackLED" HorizontalAlignment="Left" Height="26" Margin="296,636,0,0" VerticalAlignment="Top" Width="26" Grid.Column="1">
+        <Ellipse x:Name="kinectBackLED" HorizontalAlignment="Left" Height="26" Margin="306,636,0,0" VerticalAlignment="Top" Width="26" Grid.Column="1">
             <Ellipse.Fill>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}"/>
             </Ellipse.Fill>
@@ -126,16 +126,18 @@
         <Label Content="Stand" Grid.Column="1" HorizontalAlignment="Left" Margin="123,605,0,0" VerticalAlignment="Top"/>
         <Label Content="Image" Grid.Column="1" HorizontalAlignment="Left" Margin="180,605,0,0" VerticalAlignment="Top"/>
         <Label Content="kinect F" Grid.Column="1" HorizontalAlignment="Left" Margin="238,605,0,0" VerticalAlignment="Top"/>
-        <Label Content="kinect B" Grid.Column="1" HorizontalAlignment="Left" Margin="287,605,0,0" VerticalAlignment="Top"/>
+        <Label Content="kinect B" Grid.Column="1" HorizontalAlignment="Left" Margin="297,605,0,0" VerticalAlignment="Top"/>
         <Ellipse x:Name="remoteLED" HorizontalAlignment="Left" Height="26" Margin="363,636,0,0" VerticalAlignment="Top" Width="26" Grid.Column="1">
             <Ellipse.Fill>
                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ScrollBarColorKey}}"/>
             </Ellipse.Fill>
         </Ellipse>
         <Label Content="Remote" Grid.Column="1" HorizontalAlignment="Left" Margin="351,605,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="limboResetButton" Content="Limbo Reset" HorizontalAlignment="Left" Margin="0,178,0,0" VerticalAlignment="Top" Width="75" Click="limboResetButton_Click" Grid.Column="1"/>
+        <Button x:Name="limboResetButton" Content="Limbo Reset" HorizontalAlignment="Left" Margin="79,179,0,0" VerticalAlignment="Top" Width="75" Click="limboResetButton_Click" Grid.Column="1"/>
         <TextBlock x:Name="SceneDisplayBox" Grid.Column="1" HorizontalAlignment="Left" Margin="134,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="47" Width="214" Text="Scene Display" FontFamily="TradeGothic LT BdCondTwenty" FontSize="40"/>
         <TextBox x:Name="CommsData" HorizontalAlignment="Left" Height="41" Margin="28,493,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="311"/>
+        <TextBlock HorizontalAlignment="Left" Margin="28,472,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Language="ko-kr" Text="Remote Message"/></TextBlock>
+        <Button x:Name="mergeButton" Content="Merge" HorizontalAlignment="Left" Margin="416,138,0,0" VerticalAlignment="Top" Width="74" Grid.Column="1" Click="mergeButton_Click"/>
 
 
     </Grid>
