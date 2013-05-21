@@ -104,24 +104,7 @@ namespace MainController
             
         }
 
-        private string SceneToText(int sceneNum)
-        {
-            string scene =" ";
-            if (sceneNum == slideviewScene)
-            {
-                scene = "Slide View";
-            }
-            else if (sceneNum == exerciseScene)
-            {
-                scene = "Exercise";
-            }
-            else if (sceneNum == limboScene)
-            {
-                scene = "Limbo";
-            }
-
-            return scene;
-        }
+        
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -131,8 +114,7 @@ namespace MainController
             dispatcherTimer.Start();
 
 
-            SceneDisplayBox.TextAlignment = TextAlignment.Center;
-            SceneDisplayBox.Text = SceneToText(currentScene);
+            
 
             comms_connect.Content = "Connect";
 
@@ -436,21 +418,14 @@ namespace MainController
             MySettings.Default.Save();
         }
 
-        private void slideSceneButton_Click(object sender, RoutedEventArgs e)
-        {
-            goToSlideviewScene();
-            
-        }
+       
 
         private void exerciseSceneButton_Click(object sender, RoutedEventArgs e)
         {
             goToExerciseScene();
         }
 
-        private void limboSceneButton_Click(object sender, RoutedEventArgs e)
-        {
-            goToLimboScene();
-        }
+       
 
         private void successButton_Click(object sender, RoutedEventArgs e)
         {
@@ -1024,7 +999,7 @@ namespace MainController
             kinectOn(kinectFront);
             kinectOn(kinectBack);
             limboStandReset();
-            SceneDisplayBox.Text = SceneToText(currentScene);
+           
 
         }
 
@@ -1036,7 +1011,7 @@ namespace MainController
             kinectOff(kinectFront);
             kinectOff(kinectBack);
             limboStandReset();
-            SceneDisplayBox.Text = SceneToText(currentScene);
+            
             
 
         }
@@ -1047,7 +1022,7 @@ namespace MainController
             limboViewerSetScene(currentScene);
             kinectOn(kinectFront);
             kinectOn(kinectBack);
-            SceneDisplayBox.Text = SceneToText(currentScene);
+            
 
         }
 
