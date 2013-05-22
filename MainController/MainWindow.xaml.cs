@@ -78,7 +78,7 @@ namespace MainController
         private int currentScene = slideviewScene;
 
         private int userCount;
-
+        private int cellPhoneNumber;
         private int standHeight = 3; // 5.0 = 3, 4.0 = 2, 3.0 = 1
 
         private bool iPadOK = false;
@@ -90,7 +90,16 @@ namespace MainController
         private bool kinectBackOK = false;
         private bool remoteConOK = false;
 
+
+
+
+
+        // User Status
+        private bool numberReceived = false;
+        private bool userRecognized = false;
         private bool photoTaken = false;
+        private bool photoReady = false;
+        private bool successFail = false;
 
         StringComparer stringComparer = StringComparer.OrdinalIgnoreCase;
 
@@ -147,6 +156,8 @@ namespace MainController
             userCount = MySettings.Default.userCountSetting;
             userCountDisplay.Text = userCount.ToString();
 
+            CellPhoneNumberDisplayBox.Text = "User Cell Phone Numeber";
+
 
             myIPAddrText.Text = LocalIPAddress();
 
@@ -180,7 +191,7 @@ namespace MainController
             oscCmdServer.Start();
 
 
-
+            updateUserStatus();
 
         }
 
@@ -504,12 +515,12 @@ namespace MainController
 
 
         // iPad Message Send
-        private void iPadSendPicture(int _userCount)
-        {
-            OscMessage msg = new OscMessage(ipadIP, "/ipad/picture");
-            msg.Append(_userCount);
-            msg.Send(ipadIP);
-        }
+        //private void iPadSendPicture(int _userCount)
+        //{
+        //    OscMessage msg = new OscMessage(ipadIP, "/ipad/picture");
+        //    msg.Append(_userCount);
+        //    msg.Send(ipadIP);
+        //}
 
         private void iPadNextUserReady()
         {
@@ -520,15 +531,24 @@ namespace MainController
 
         private void iPadSendSuccess(bool successStatus)
         {
-            OscMessage msg = new OscMessage(limboViewerIP, "/ipad");
+            OscMessage msg;
             if (successStatus)
             {
-                msg.Append("success");
+                msg = new OscMessage(limboViewerIP, "/ipad/success");
+                msg.Append(userCount.ToString() + "_0"+ cellPhoneNumber.ToString());
             }
             else 
             {
-                msg.Append("fail");
+                msg = new OscMessage(limboViewerIP, "/ipad/fail");
+                msg.Append(userCount.ToString() + "_0" + cellPhoneNumber.ToString());
             }
+
+            userCount++;
+            MySettings.Default.userCountSetting = userCount;
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+            {
+                userCountDisplay.Text = userCount.ToString();
+            }));
 
             msg.Send(ipadIP);
         }
@@ -575,11 +595,13 @@ namespace MainController
                         
                     }
                 }
-                if (message.Data[0].ToString() == "exercise")
+                else
+                if (message.Data[0].ToString() == "start")
                 {
-                    goToExerciseScene();
+                    //goToExerciseScene();
 
                 }
+                else
                 if (message.Data[0].ToString() == "ok")
                 {
                     iPadOK = true;
@@ -587,6 +609,32 @@ namespace MainController
 
             }
 
+            if (message.Address == "/ipad/cell")
+            {
+                // init other user status
+                numberReceived = true;
+                userRecognized = false;
+                photoTaken = false;
+                photoReady = false;
+                successFail = false;
+
+                updateUserStatus();
+
+                bool result = int.TryParse(message.Data[0].ToString(), out cellPhoneNumber);
+                if (result)
+                {
+                    Console.WriteLine("Valid Cell Phone Number");
+                    this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+                    {
+                        CellPhoneNumberDisplayBox.Text = "0"+cellPhoneNumber.ToString();
+                    }));
+                    
+                }
+                else {
+                    Console.WriteLine("Phone Number Conversion Failed!");
+                }
+                
+            }
         }
 
         // Limbo Stand Message Send
@@ -619,19 +667,15 @@ namespace MainController
                
                 if (message.Data[0].ToString() == "shoot")
                 {
-                    takePicture();
-                    //userCount++;
-
-                    //imageServerTakePhoto(userCount);
-                    //limboViewerCaptureFree(userCount);
-
-                    //MySettings.Default.userCountSetting = userCount;
-                    //this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
-                    //{
-                    //    userCountDisplay.Text = userCount.ToString();
-                    //}));
-                   
-
+                    if (photoTaken == false)
+                    {
+                        photoTaken = true;
+                        takePicture();
+                        updateUserStatus();
+                      
+                    }
+                    
+    
                 }
                 else
                 if (message.Data[0].ToString() == "ok")
@@ -656,10 +700,32 @@ namespace MainController
             msg.Send(limboViewerIP);
         }
 
-        private void limboViewerCaptureFree(int _userCount)
+
+        private void limboViewerSendUserTracked()
+        {
+            OscMessage msg = new OscMessage(limboViewerIP, "/view/user");
+            msg.Append("tracked");
+            msg.Send(limboViewerIP);
+        }
+
+        private void limboViewerPlayCountDown()
+        {
+            OscMessage msg = new OscMessage(limboViewerIP, "/view");
+            msg.Append("countdown");
+            msg.Send(limboViewerIP);
+        }
+
+        private void limboViewerPlaySlideView()
+        {
+            OscMessage msg = new OscMessage(limboViewerIP, "/view");
+            msg.Append("slideview");
+            msg.Send(limboViewerIP);
+        }
+
+        private void limboViewerCaptureFree(int _userCount , int _cellPhoneNumber)
         {
             OscMessage msg = new OscMessage(limboViewerIP, "/view/picture");
-            msg.Append(_userCount);
+            msg.Append(_userCount.ToString() + "_0" + _cellPhoneNumber.ToString());
             msg.Send(limboViewerIP);
         }
 
@@ -678,10 +744,10 @@ namespace MainController
             msg.Send(limboViewerIP);
         }
 
-        private void limboViewerGetImageFromServer(int _userCount)
+        private void limboViewerGetImageFromServer(int _userCount, int _cellPhoneNumber)
         {
             OscMessage msg = new OscMessage(limboViewerIP, "/view/merge");
-            msg.Append(_userCount);
+            msg.Append(_userCount.ToString() + "_0" + _cellPhoneNumber.ToString());
             msg.Send(limboViewerIP);
         }
 
@@ -727,10 +793,10 @@ namespace MainController
             msg.Send(imageServerIP);
         }
 
-        private void imageServerTakePhoto(int _userCount)
+        private void imageServerTakePhoto(int _userCount, int _cellPhoneNumber)
         {
             OscMessage msg = new OscMessage(imageServerIP, "/image/picture");
-            msg.Append(_userCount);
+            msg.Append(_userCount.ToString()+"_0"+_cellPhoneNumber.ToString());
             msg.Send(imageServerIP);
         }
 
@@ -758,14 +824,16 @@ namespace MainController
             {
                 if (message.Data[0].ToString() == "done")
                 {
-                    iPadSendPicture(userCount);
-                    limboViewerGetImageFromServer(userCount);
-                    userCount++;
-                    MySettings.Default.userCountSetting = userCount;
-                    this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
-                    {
-                        userCountDisplay.Text = userCount.ToString();
-                    }));
+                    photoReady = true;
+                    //iPadSendPicture(userCount);
+                    limboViewerGetImageFromServer(userCount, cellPhoneNumber);
+                    updateUserStatus();
+                    //userCount++;
+                    //MySettings.Default.userCountSetting = userCount;
+                    //this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+                    //{
+                    //    userCountDisplay.Text = userCount.ToString();
+                    //}));
                 }
             }
         }
@@ -910,6 +978,20 @@ namespace MainController
                     }
                 }
 
+                // when user's all skeleton is trakced
+                if (message.Data[0].ToString() == "tracked")
+                {
+                    if (kinect == 1)
+                    {
+                        if (userRecognized == false)
+                        {
+                            limboViewerSendUserTracked();
+                            userRecognized = true;
+                            updateUserStatus();
+                        }
+                    }
+                }
+
             }
 
         }
@@ -931,26 +1013,31 @@ namespace MainController
             {
                 remoteConOK = true;
             }
+            else
             if (stringComparer.Equals("1\r", message))
             {
                 Console.WriteLine("Success");
 
                 sendSuccess(true);
-                
-                
-                
 
             }
-
+            else
             if (stringComparer.Equals("2\r", message))
             {
-                Console.WriteLine("Special Cmd");
+                Console.WriteLine("Count Down");
+                limboViewerPlayCountDown();
             }
-
+            else
             if (stringComparer.Equals("3\r", message))
             {
                 Console.WriteLine("Fail");
                 sendSuccess(false);
+            }
+            else if(stringComparer.Equals("0\r", message))
+            {
+                Console.WriteLine("Photo Wall");
+                limboViewerPlaySlideView();
+
             }
 
         }
@@ -984,12 +1071,12 @@ namespace MainController
         private void takePicture()
         {
 
-            if (photoTaken == false)
-            {
-                photoTaken = true;
-                imageServerTakePhoto(userCount);
-                limboViewerCaptureFree(userCount);
-            }
+            //if (photoTaken == false)
+            //{
+              //  photoTaken = true;
+                imageServerTakePhoto(userCount, cellPhoneNumber);
+                limboViewerCaptureFree(userCount , cellPhoneNumber);
+            //}
         }
 
         private void goToLimboScene()
@@ -1028,9 +1115,11 @@ namespace MainController
 
         private void sendSuccess(bool successStatus)
         {
-            photoTaken = false;
+            //photoTaken = false;
+            successFail = true;
             iPadSendSuccess(successStatus);
             limboViewerSendSuccess(successStatus);
+            updateUserStatus();
         }
 
         
@@ -1144,6 +1233,63 @@ namespace MainController
 
         }
 
+        //private bool numberReceived = false;
+        //private bool userRecognized = false;
+        //private bool photoTaken = false;
+        //private bool photoReady = false;
+        //private bool successFail = false;
+        
+        private void updateUserStatus()
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+            {
+                if (numberReceived)
+                {
+                    numberReceivedDisplay.Background = new SolidColorBrush(Colors.GreenYellow);
+                }
+                else 
+                {
+                    numberReceivedDisplay.Background = new SolidColorBrush(Colors.Gray);
+                }
+
+                if (userRecognized)
+                {
+                    userRecognizedDisplay.Background = new SolidColorBrush(Colors.GreenYellow);
+                }
+                else
+                {
+                    userRecognizedDisplay.Background = new SolidColorBrush(Colors.Gray);
+                }
+
+                if (photoTaken)
+                {
+                    photoTakenDisplay.Background = new SolidColorBrush(Colors.GreenYellow);
+                }
+                else
+                {
+                    photoTakenDisplay.Background = new SolidColorBrush(Colors.Gray);
+                }
+
+                if (photoReady)
+                {
+                    photoReadyDisplay.Background = new SolidColorBrush(Colors.GreenYellow);
+                }
+                else
+                {
+                    photoReadyDisplay.Background = new SolidColorBrush(Colors.Gray);
+                }
+
+                if (successFail)
+                {
+                    successFailDisplay.Background = new SolidColorBrush(Colors.GreenYellow);
+                }
+                else
+                {
+                    successFailDisplay.Background = new SolidColorBrush(Colors.Gray);
+                }
+            }));
+
+        }
        
 
       

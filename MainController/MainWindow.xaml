@@ -80,7 +80,7 @@
         <Button x:Name="comms_connect" Content="Connect" HorizontalAlignment="Left" Margin="263,449,0,0" VerticalAlignment="Top" Width="75" Click="comms_connect_Click"/>
         <Rectangle x:Name="frontStatus" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="100" Margin="17,369,0,0" VerticalAlignment="Top" Width="214" Grid.Column="1"/>
         <Rectangle x:Name="backStatus" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="100" Margin="273,369,0,0" VerticalAlignment="Top" Width="215" Grid.Column="1"/>
-        <Button x:Name="exerciseSceneButton" Content="Exercise Scene" HorizontalAlignment="Left" Margin="207,75,0,0" VerticalAlignment="Top" Width="115" Height="30" Grid.Column="1" Click="exerciseSceneButton_Click"/>
+        <Button x:Name="exerciseSceneButton" Content="Exercise Scene" HorizontalAlignment="Left" Margin="373,71,0,0" VerticalAlignment="Top" Width="115" Height="30" Grid.Column="1" Click="exerciseSceneButton_Click"/>
         <Button x:Name="limboSetButton" Content="Limbo Set" HorizontalAlignment="Left" Margin="79,138,0,0" VerticalAlignment="Top" Width="75" Click="limboSetButton_Click" Grid.Column="1"/>
         <Button x:Name="pictureButton" Content="Picture" HorizontalAlignment="Left" Margin="330,138,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="pictureButton_Click"/>
         <Button x:Name="successButton" Content="Success" HorizontalAlignment="Left" Margin="330,179,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="successButton_Click"/>
@@ -135,6 +135,33 @@
         <TextBox x:Name="CommsData" HorizontalAlignment="Left" Height="41" Margin="28,493,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="311"/>
         <TextBlock HorizontalAlignment="Left" Margin="28,472,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Language="ko-kr" Text="Remote Message"/></TextBlock>
         <Button x:Name="mergeButton" Content="Merge" HorizontalAlignment="Left" Margin="416,138,0,0" VerticalAlignment="Top" Width="74" Grid.Column="1" Click="mergeButton_Click"/>
+        <TextBlock x:Name="CellPhoneNumberDisplayBox" Grid.Column="1" HorizontalAlignment="Left" Margin="114,74,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="218" Height="21"/>
+        <Label Content="핸드폰 번호" Grid.Column="1" HorizontalAlignment="Left" Margin="17,71,0,0" VerticalAlignment="Top" Width="80"/>
+        <Label x:Name="numberReceivedDisplay" Content="번호 받음" Grid.Column="1" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="65">
+            <Label.Background>
+                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
+            </Label.Background>
+        </Label>
+        <Label x:Name="userRecognizedDisplay" Content="유저 인식" Grid.Column="1" HorizontalAlignment="Left" Margin="114,35,0,0" VerticalAlignment="Top" Width="65">
+            <Label.Background>
+                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
+            </Label.Background>
+        </Label>
+        <Label x:Name="photoTakenDisplay" Content="사진 찍힘" Grid.Column="1" HorizontalAlignment="Left" Margin="217,35,0,0" VerticalAlignment="Top" Width="65">
+            <Label.Background>
+                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
+            </Label.Background>
+        </Label>
+        <Label x:Name="photoReadyDisplay" Content="사진 완료" Grid.Column="1" HorizontalAlignment="Left" Margin="324,35,0,0" VerticalAlignment="Top" Width="65">
+            <Label.Background>
+                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
+            </Label.Background>
+        </Label>
+        <Label x:Name="successFailDisplay" Content="성공 실패" Grid.Column="1" HorizontalAlignment="Left" Margin="423,35,0,0" VerticalAlignment="Top" Width="65">
+            <Label.Background>
+                <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ActiveBorderColorKey}}"/>
+            </Label.Background>
+        </Label>
 
 
     </Grid>
