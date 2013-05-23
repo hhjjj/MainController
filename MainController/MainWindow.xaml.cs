@@ -97,7 +97,8 @@ namespace MainController
         // User Status
         private bool numberReceived = false;
         private bool userRecognized = false;
-        private bool photoTaken = false;
+        // prevent the photo from being taken when the app started
+        private bool photoTaken = true;
         private bool photoReady = false;
         private bool successFail = false;
 
@@ -531,6 +532,7 @@ namespace MainController
 
         private void iPadSendSuccess(bool successStatus)
         {
+            // keep trying until 'photoReady = true' 
             OscMessage msg;
             if (successStatus)
             {
@@ -826,6 +828,7 @@ namespace MainController
                 {
                     photoReady = true;
                     //iPadSendPicture(userCount);
+                    Console.WriteLine("Merge Done!!");
                     limboViewerGetImageFromServer(userCount, cellPhoneNumber);
                     updateUserStatus();
                     //userCount++;
